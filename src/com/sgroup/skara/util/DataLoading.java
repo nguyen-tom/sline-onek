@@ -1,5 +1,7 @@
 package com.sgroup.skara.util;
 
+import java.util.List;
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
@@ -8,6 +10,7 @@ import com.sgroup.skara.R;
 import com.sgroup.skara.database.SharedPreferencesDB;
 import com.sgroup.skara.listener.LoadingDataListener;
 import com.sgroup.skara.model.Section;
+import com.sgroup.skara.model.Song;
 import com.sgroup.skara.model.UserOption;
 
 
@@ -41,8 +44,11 @@ public class DataLoading extends AsyncTask<UserOption, Integer, Section> {
 		  
 	       try {
 			SharedPreferencesDB share  = new SharedPreferencesDB(context);
-			section = fileUtil.getSection(context, userOption,share.getEndChar(),10);
-			share.setEndchar(section.getEndChar());
+			List<Song> arrStr  = DBUtil.getAriangList();
+			section = new Section();
+			section.setLsSong(arrStr);
+			//section = fileUtil.getSection(context, userOption,share.getEndChar(),);
+			//share.setEndchar(section.getEndChar());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

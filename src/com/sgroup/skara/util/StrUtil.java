@@ -29,4 +29,7 @@ public class StrUtil {
 	   
 	   
    }
+   public static String nvl(final String str) {
+       return str != null ? str : "";
+   }
 }

@@ -35,6 +35,7 @@ public class EndlessListView extends ListView implements OnScrollListener {
 	private boolean isLoading;
 	private EndlessListener listener;
 	private SongAdapter adapter;
+	private List<Song> data;
 	
 	public EndlessListView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);	
@@ -95,9 +96,12 @@ public class EndlessListView extends ListView implements OnScrollListener {
 	public void addNewData(List<Song> data) {
 		
 		if(footer != null) this.removeFooterView(footer);
-		adapter.addAll(data);
+		this.data.addAll(data);
 		adapter.notifyDataSetChanged();
 		isLoading = false;
+	}
+	public void setData(List<Song> data){
+		this.data = data;
 	}
 	
 	

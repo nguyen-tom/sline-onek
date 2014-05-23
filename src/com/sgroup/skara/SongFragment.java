@@ -26,21 +26,24 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.sgroup.skara.adapter.SongAdapter;
 import com.sgroup.skara.database.SharedPreferencesDB;
+import com.sgroup.skara.listener.DBListener;
 import com.sgroup.skara.listener.LoadingDataListener;
 import com.sgroup.skara.model.Section;
 import com.sgroup.skara.model.Song;
 import com.sgroup.skara.model.UserOption;
 import com.sgroup.skara.util.Constant;
+import com.sgroup.skara.util.DBWorking;
 import com.sgroup.skara.util.DataLoading;
-import com.sgroup.skara.util.EndlessListView;
 import com.sgroup.skara.util.MultiSpinner;
 import com.sgroup.skara.util.MultiSpinner.MultiSpinnerListener;
 
-public class SongFragment extends Fragment  implements EndlessListView.EndlessListener,LoadingDataListener{
+public class SongFragment extends Fragment  implements LoadingDataListener,DBListener{
     private static final String TAG  = "SongFragment";
 	private int device   =  Constant.DEVICE_ARIRANG;
 	private int language =  Constant.VIETNAMESE;
@@ -89,14 +92,15 @@ public class SongFragment extends Fragment  implements EndlessListView.EndlessLi
 	
 	@Override
 	public void onActivityCreated(Bundle save){
+		DBWorking dbWorking  = new DBWorking(this.getActivity(), this);
+		 dbWorking.execute();
 		super.onActivityCreated(save);
 		db = new SharedPreferencesDB(this.getActivity());
 		db.setEndchar(0);
 		loadData();
-		lvDanhSach.setLoadingView(R.layout.loading_layout);
 		lvDanhSach.setAdapter(songAdapter);
-		lvDanhSach.setListener(this);
-		((SkaraActivity)this.getActivity()).showLoading(false);
+		lvDanhSach.setFastScrollEnabled(true);
+		((SKaraActivity)this.getActivity()).showLoading(false);
 	}
 	public void loadData(){
 		SharedPreferencesDB db = new SharedPreferencesDB(this.getActivity());
@@ -125,7 +129,7 @@ public class SongFragment extends Fragment  implements EndlessListView.EndlessLi
 	private Button bt_Arirang;
 	private Button bt_California;
 	private Button bt_MisicCore;
-	private EndlessListView lvDanhSach;
+	private ListView lvDanhSach;
 	private Spinner bt_searchOpt;
 	private EditText searchText;
 	private Button bt_Filter;
@@ -183,7 +187,7 @@ public class SongFragment extends Fragment  implements EndlessListView.EndlessLi
 			}
 		});
 		
-		lvDanhSach = (EndlessListView)rootView.findViewById(R.id.lvDanhSach);
+		lvDanhSach = (ListView)rootView.findViewById(R.id.lvDanhSach);
 		lvDanhSach.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -331,10 +335,9 @@ public class SongFragment extends Fragment  implements EndlessListView.EndlessLi
 	
 	
 	public void loadDataListView() {
-		 ((SkaraActivity)this.getActivity()).showLoading(false);
+		 ((SKaraActivity)this.getActivity()).showLoading(false);
 		   danhSachBaiHat.clear();
 		   songAdapter = new SongAdapter(this, danhSachBaiHat);
-		   lvDanhSach.setLoadingView(R.layout.loading_layout);
 		   lvDanhSach.setAdapter(songAdapter);
 		
 		 new SharedPreferencesDB(getActivity()).setEndchar(0);
@@ -384,6 +387,7 @@ public class SongFragment extends Fragment  implements EndlessListView.EndlessLi
 		
 		songAdapter = new SongAdapter(this, rs);
 		lvDanhSach.setAdapter(songAdapter);
+		
 	}
 	
 	public void Search(String key) {
@@ -425,7 +429,8 @@ public class SongFragment extends Fragment  implements EndlessListView.EndlessLi
 public void callBack(Section lkSong) {
 	Log.d(TAG,"Count List Result :" + lkSong.getLsSong().size());
 	Log.d(TAG,"ITEM FIRST :" + lkSong.getLsSong().get(0));
-	lvDanhSach.addNewData(lkSong.getLsSong());
+	danhSachBaiHat.addAll(lkSong.getLsSong());
+	songAdapter.notifyDataSetChanged();
 }
 
 @Override
@@ -437,6 +442,12 @@ public void error(String message) {
 @Override
 public void loading(boolean show) {
 	// TODO Auto-generated method stub
+	
+}
+
+@Override
+public void loadedDB() {
+	Toast.makeText(this.getActivity(), "LOADED DB", Toast.LENGTH_SHORT).show();
 	
 }
 

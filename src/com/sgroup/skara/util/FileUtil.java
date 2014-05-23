@@ -20,7 +20,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.sgroup.skara.SkaraActivity;
+import com.sgroup.skara.SKaraActivity;
 import com.sgroup.skara.model.LinkSongs;
 import com.sgroup.skara.model.Section;
 import com.sgroup.skara.model.Song;
@@ -264,7 +264,7 @@ public class FileUtil {
 		
 		Toast.makeText(context, "???? th??m b??i h??t "+bh.ten+" v??o danh s??ch y??u th??ch", 100).show();
 	}
-   public void RemoveFavorite(SkaraActivity context,LinkSongs linkSongs,Song bh){
+   public void RemoveFavorite(SKaraActivity context,LinkSongs linkSongs,Song bh){
 	   
 	    linkSongs.getLkFavorite().remove(bh);
 	    linkSongs.getListFavoriteName().remove(bh.ten);

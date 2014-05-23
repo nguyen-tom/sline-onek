@@ -59,6 +59,12 @@ public class Song {
 	  }
 		
 	}
+	public Song(String maso,String ten,String loi,String nhacsi){
+		this.maso  = maso;
+		this.ten   = ten;
+		this.loi   = loi;
+		this.nhacsi = nhacsi;
+	}
 	
 	public String SimplifiedString(String str)
 	{

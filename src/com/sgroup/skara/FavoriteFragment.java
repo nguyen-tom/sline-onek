@@ -26,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -37,11 +38,10 @@ import com.sgroup.skara.model.Song;
 import com.sgroup.skara.model.UserOption;
 import com.sgroup.skara.util.Constant;
 import com.sgroup.skara.util.DataLoading;
-import com.sgroup.skara.util.EndlessListView;
 import com.sgroup.skara.util.MultiSpinner;
 import com.sgroup.skara.util.MultiSpinner.MultiSpinnerListener;
 
-public class FavoriteFragment extends Fragment  implements EndlessListView.EndlessListener,LoadingDataListener{
+public class FavoriteFragment extends Fragment  implements LoadingDataListener{
 
 	private int device   =  Constant.DEVICE_ARIRANG;
 	private int language =  Constant.VIETNAMESE;
@@ -88,10 +88,10 @@ public class FavoriteFragment extends Fragment  implements EndlessListView.Endle
 	@Override
 	public void onActivityCreated(Bundle save){
 		super.onActivityCreated(save);
-		lvDanhSach.setLoadingView(R.layout.loading_layout);
+//		lvDanhSach.setLoadingView(R.layout.loading_layout);
 		lvDanhSach.setAdapter(songAdapter);
-		lvDanhSach.setListener(this);
-		((SkaraActivity)this.getActivity()).showLoading(false);
+//		lvDanhSach.setListener(this);
+		((SKaraActivity)this.getActivity()).showLoading(false);
 		
 	}
 	public void loadData(){
@@ -120,7 +120,7 @@ public class FavoriteFragment extends Fragment  implements EndlessListView.Endle
 	private Button bt_Arirang;
 	private Button bt_California;
 	private Button bt_MisicCore;
-	private EndlessListView lvDanhSach;
+	private ListView lvDanhSach;
 	private Spinner bt_searchOpt;
 	private EditText searchText;
 	private Button bt_Filter;
@@ -178,7 +178,7 @@ public class FavoriteFragment extends Fragment  implements EndlessListView.Endle
 			}
 		});
 		
-		lvDanhSach = (EndlessListView)rootView.findViewById(R.id.lvDanhSach);
+		lvDanhSach = (ListView)rootView.findViewById(R.id.lvDanhSach);
 		lvDanhSach.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -325,7 +325,7 @@ public class FavoriteFragment extends Fragment  implements EndlessListView.Endle
 	
 	
 	public void loadDataListView() {
-		 ((SkaraActivity)this.getActivity()).showLoading(true);
+		 ((SKaraActivity)this.getActivity()).showLoading(true);
 		loadData();
 	}
 	
@@ -412,7 +412,8 @@ public class FavoriteFragment extends Fragment  implements EndlessListView.Endle
 
 @Override
 public void callBack(Section lkSong) {
-	lvDanhSach.addNewData(lkSong.getLsSong());
+	danhSachBaiHat.addAll(lkSong.getLsSong());
+	songAdapter.notifyDataSetChanged();
 	
 }
 

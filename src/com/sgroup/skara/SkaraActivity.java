@@ -9,13 +9,17 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.sgroup.skara.listener.LoadingDataListener;
 import com.sgroup.skara.model.LinkSongs;
+import com.sgroup.skara.model.Section;
+import com.sgroup.skara.util.DBUtil;
+import com.sgroup.skara.util.DBWorking;
 import com.viewpagerindicator.TabPageIndicator;
 
-public class SkaraActivity extends FragmentActivity {
+public class SKaraActivity extends FragmentActivity implements LoadingDataListener{
 
-	public SkaraActivity pThis=this;
 	private static final String[] CONTENT = new String[] { "Danh sách", "Yêu thích"};
 	public static final int ID_TAB_LIST = 0;
 	public static final int ID_TAB_FAVORITE = 1;
@@ -33,15 +37,20 @@ public class SkaraActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-      
+        try {
+			DBUtil.initialize(this);
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
         adapter = new MyPagerAdapterAdapter(getSupportFragmentManager());
         loading = (LinearLayout)findViewById(R.id.loading);
         pager = (ViewPager)findViewById(R.id.pager);
         pager.setAdapter(adapter);
-
+       
         indicator = (TabPageIndicator)findViewById(R.id.indicator);
         indicator.setViewPager(pager);
-        
+       
         indicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -61,6 +70,11 @@ public class SkaraActivity extends FragmentActivity {
 	private void loadSectionToCache(){
 		
 		
+	}
+	@Override
+	public void onResume(){
+		super.onResume();
+		 
 	}
 	public void showLoading(Boolean show){
 		if (show){
@@ -122,6 +136,21 @@ public class SkaraActivity extends FragmentActivity {
 	}
 	public void setFrSong(SongFragment frg){
 		this.fragmentDanhSach = frg;
+	}
+	@Override
+	public void callBack(Section lkSong) {
+		Toast.makeText(this, "UpdateDatabase Completed", Toast.LENGTH_SHORT).show();
+		
+	}
+	@Override
+	public void error(String message) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void loading(boolean show) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
