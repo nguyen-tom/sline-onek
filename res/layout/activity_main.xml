@@ -1,0 +1,44 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ffffff"
+    tools:context=".AKaraActivity" >
+
+	<LinearLayout
+	    android:orientation="vertical"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:id="@+id/contentActivity">
+	
+	    <com.viewpagerindicator.TabPageIndicator
+	        android:id="@+id/indicator"
+	        android:layout_height="40dp"
+	        android:layout_width="fill_parent"
+	        />
+	    <android.support.v4.view.ViewPager
+	        android:id="@+id/pager"
+	        android:layout_width="fill_parent"
+	        android:layout_height="0dp"
+	        android:layout_weight="1"
+	        />
+	</LinearLayout>
+
+	<LinearLayout
+	    android:orientation="vertical"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:id="@+id/loading"
+	    android:layout_centerInParent="true" >
+		<ProgressBar
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:layout_marginLeft="0dp"
+	         style="@android:style/Widget.ProgressBar.Large"/>
+	   <TextView
+	       	android:layout_width="wrap_content"
+	       	android:layout_height="wrap_content"
+	       	android:text="Đang tải danh sách" />
+
+	</LinearLayout>
+</RelativeLayout>

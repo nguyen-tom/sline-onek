@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" 
+			android:focusableInTouchMode="true">
+
+	       <EditText
+	            android:id="@+id/editTextSearch"
+	            android:layout_weight="2"
+	            android:layout_width="0dp"
+	            android:layout_height="40dp"
+	            android:hint="nhập tên bài hát"
+	            android:text="" >
+
+	        </EditText>
+
+            <Spinner
+                android:id="@+id/button1"
+                android:layout_width="55dp"
+                android:layout_height="45dp"
+                android:background="@drawable/advsearch"/>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+		        <LinearLayout
+		
+		            android:layout_width="0dp"
+		            android:layout_height="wrap_content" 
+					android:layout_weight="2">
+		
+		            <Button
+		                android:id="@+id/buttonarirang"
+			            android:layout_weight="1"
+			            android:layout_width="0dp"
+		                android:layout_height="40dp"
+		                android:text="Arirang" />
+		            
+		            <Button
+		                android:id="@+id/buttoncalifornia"
+			            android:layout_weight="1"
+			            android:layout_width="0dp"
+		                android:layout_height="40dp"
+		                android:text="California" />
+		
+		            <Button
+		                android:id="@+id/buttonmusiccore"
+			            android:layout_weight="1"
+			            android:layout_width="0dp"
+		                android:layout_height="40dp"
+		                android:text="MusicCore" />
+		        </LinearLayout>
+				<Button
+                android:id="@+id/buttonFilter"
+	            android:layout_width="45dp"
+                android:layout_height="40dp"
+                android:text="opt" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/groupoption">
+			 <Spinner
+			 	android:id="@+id/spinner1"
+	       		android:layout_weight="1"
+	         	android:layout_width="0dp"
+			 	android:layout_height="40dp" />
+            
+			 <com.sgroup.akara.util.MultiSpinner
+			 	android:id="@+id/spinner2"
+	       		android:layout_weight="1"
+	         	android:layout_width="0dp"
+			 	android:layout_height="40dp" />
+
+			 <com.sgroup.akara.util.MultiSpinner
+			 	android:id="@+id/spinner3"
+	       		android:layout_weight="1"
+	         	android:layout_width="0dp"
+			 	android:layout_height="40dp" />
+        </LinearLayout>
+        
+        <com.sgroup.akara.util.EndlessListView
+            android:id="@+id/lvDanhSach"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:cacheColorHint="#00000000" >
+
+        </com.sgroup.akara.util.EndlessListView>
+        
+</LinearLayout>
