@@ -64,30 +64,29 @@
                 android:background="@drawable/advsearch"/>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/groupoption">
-			 <Spinner
-			 	android:id="@+id/spinner1"
-	       		android:layout_weight="1"
-	         	android:layout_width="0dp"
-			 	android:layout_height="40dp" />
-            
-			 <com.sgroup.skara.util.MultiSpinner
-			 	android:id="@+id/spinner2"
-	       		android:layout_weight="1"
-	         	android:layout_width="0dp"
-			 	android:layout_height="40dp" />
 
-			 <com.sgroup.skara.util.MultiSpinner
-			 	android:id="@+id/spinner3"
-	       		android:layout_weight="1"
-	         	android:layout_width="0dp"
-			 	android:layout_height="40dp" />
-        </LinearLayout>
-        
+        <RadioGroup 
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <RadioButton android:id="@+id/radio_pirates"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/search_for_name"
+        android:onClick="onRadioButtonClicked"/>
+    <RadioButton android:id="@+id/radio_ninjas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/search_for_lyric"
+        android:onClick="onRadioButtonClicked"/>
+    <RadioButton android:id="@+id/radio_ninjas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/search_for_author"
+        android:onClick="onRadioButtonClicked"/>
+   </RadioGroup>
         <ListView
+
             android:id="@+id/lvDanhSach"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
