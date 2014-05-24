@@ -10,6 +10,7 @@
     <string name="loading">Đang lấy dữ liệu.</string>
     <string name="db_filename">kara</string>
     <string name="db_version">1.0</string>
+
     
     <!--from search  -->
     <string name="search_for_name">Tên bài hát</string>
@@ -36,7 +37,7 @@
         <item>California</item>
     </string-array>
     
-    
+
     
    
 </resources>
