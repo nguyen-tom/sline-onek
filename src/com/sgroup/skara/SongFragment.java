@@ -221,17 +221,17 @@ public class SongFragment extends Fragment  implements LoadingDataListener,DBLis
 			}
 		});
 		
-		bt_Filter= (Button) rootView.findViewById(R.id.buttonFilter);
-		bt_Filter.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				showFilter();
-			}
-		});
+//		bt_Filter= (Button) rootView.findViewById(R.id.buttonFilter);
+//		bt_Filter.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View arg0) {
+//				// TODO Auto-generated method stub
+//				showFilter();
+//			}
+//		});
 		
-		bt_Arirang= (Button) rootView.findViewById(R.id.buttonarirang);
+		bt_Arirang= (Button) rootView.findViewById(R.id.bt_ariang);
 		bt_Arirang.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -242,7 +242,7 @@ public class SongFragment extends Fragment  implements LoadingDataListener,DBLis
 				//main.getFrFavorite().loadDataListView();
 			}
 		});
-		bt_California= (Button) rootView.findViewById(R.id.buttoncalifornia);
+		bt_California= (Button) rootView.findViewById(R.id.bt_california);
 		bt_California.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -252,7 +252,7 @@ public class SongFragment extends Fragment  implements LoadingDataListener,DBLis
 				loadDataListView();
 			}
 		});
-		bt_MisicCore= (Button) rootView.findViewById(R.id.buttonmusiccore);
+		bt_MisicCore= (Button) rootView.findViewById(R.id.bt_music_core);
 		bt_MisicCore.setOnClickListener(new OnClickListener(){
 			
 			@Override

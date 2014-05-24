@@ -94,23 +94,23 @@ public class DBUtil {
 		}
 		return null;
 	}
-	private static final String ARIANG_LIST_SQL = "select name, author, lyrics, author from m_ariang order by name";
+	private static final String ARIANG_LIST_SQL = "select code, name, author, lyrics, author from m_ariang order by name COLLATE UNICODE ";
 
 	public static List<Song> getAriangList() {
 		return getListSong(ARIANG_LIST_SQL, null);
 	}
 
-	private static final String CALI_LIST_SQL = "select name, author, lyrics,author from m_cali order by name";
+	private static final String CALI_LIST_SQL = "select code,name, author, lyrics,author from m_cali order by name";
     
 	public static String[][] getCaliforniaList() {
 		return getListRev(CALI_LIST_SQL, null);
 	}
-	private static final String MUSIC_CORE_LIST_SQL = "select name, author, lyrics from m_music_core order by name";
+	private static final String MUSIC_CORE_LIST_SQL = "select code,name, author, lyrics from m_music_core order by name";
 
 	public static String[][] getMusicCoreList() {
 		return getListRev(CALI_LIST_SQL, null);
 	}
-	private static final String FAVORITE_LIST_SQL = "select name, author, lyrics from m_music_core order by name";
+	private static final String FAVORITE_LIST_SQL = "select code,name, author, lyrics from m_music_core order by name";
 
 	public static String[][] getFavoriteList() {
 		return getListRev(CALI_LIST_SQL, null);
@@ -161,12 +161,12 @@ public class DBUtil {
 				final SQLiteDatabase db = helper.getReadableDatabase();
 				int limit = 0;
 				result  = new ArrayList<Song>();
-				while(limit + 500 <= 7300){
+				while(limit + 500 <= 7800){
 					String sqlLimit = sql + " LIMIT " + limit  + ", 500";
 					final Cursor cursor = db.rawQuery(sqlLimit, args);
 					cursor.moveToFirst();
 					for (int r = 0; r < cursor.getCount(); r++) {
-						int i  = 0;
+						    int i  = 0;
 							Song song  = new Song(cursor.getString(i++),
 									              cursor.getString(i++),
 									              cursor.getString(i++),
