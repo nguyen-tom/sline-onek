@@ -1,47 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
     android:orientation="horizontal" >
     
-    <ImageView
-        android:id="@+id/imgitem"
-        android:layout_width="45dip"
-        android:layout_height="45dip"
-        android:paddingLeft="0dp"
-        android:paddingRight="2dp"
-        android:paddingTop="2dp"
-        android:layout_marginTop="2dp"
-        android:contentDescription="here"
-        android:src="@drawable/mic" />
-
     <TextView
         android:id="@+id/txtmaso"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_width="wrap_content"
-        android:layout_marginTop="7dp"
-        android:textSize="25sp"
-        android:textColor="#000000" />
+        android:gravity="center"
+        android:padding = "5dp"
+        android:textSize="14pt"
+        android:text="55656"
+        
+         android:textStyle="bold"
+        android:textColor="@color/background_title" />
     
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="wrap_content"
         android:paddingLeft="5dp" 
+        android:paddingTop ="5dp"
+        android:paddingBottom ="5dp"
         android:orientation="vertical" >
         
 		  <TextView
 		      android:id="@+id/txtten"
-		      android:layout_height="25dp"
+		      android:layout_height="wrap_content"
 		      android:layout_width="wrap_content"
 		      android:layout_marginTop="2dp"
-		      android:textSize="20sp"
+		      android:textSize="9pt"
+		      android:maxLines="2"
+		      android:ellipsize="end"
+		      android:text="1 2 3 Chia doi loi di dakfafjdsakf askdfas dadsad"
 		      android:textColor="#000000" />
 		  <TextView
 		      android:id="@+id/txtloi"
-		      android:layout_height="20dp"
+		      android:layout_height="wrap_content"
 		      android:layout_width="wrap_content"
 		      android:layout_marginTop="2dp"
 		      android:textSize="15sp"
+		      android:lines="1"
+		      
+		      android:ellipsize="end"
+		      android:textStyle="italic"
+		      android:text="1 2 3 Chia doi loi ve adlafkasf asf...."
 		      android:textColor="#000000" />
 	</LinearLayout>
 </LinearLayout>

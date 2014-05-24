@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name ="white">#FFFFFF</color>
+    <color name ="black">#000000</color>
+    <color name="background_title">#653511</color>
+    <color name="bg_section_search">#F7F7F7</color>
+    <color name="color_line">#DEDEDE</color>
+</resources>

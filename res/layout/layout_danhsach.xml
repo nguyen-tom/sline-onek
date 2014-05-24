@@ -4,94 +4,146 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    
-
         <LinearLayout
             android:id="@+id/linearLayout2"
             android:layout_width="fill_parent"
-            android:layout_height="30dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+             android:paddingRight="20dp"
+             android:paddingTop="10dp"
+             android:paddingBottom="10dp"
             android:background="@color/background_title"
             android:orientation="horizontal" android:gravity="center_vertical">
             <Button
                 android:id="@+id/bt_ariang"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="1px"
                 android:layout_weight="1"
-                android:background="@drawable/coner_four_light"
-                android:textColor="@color/white" />
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text ="@string/ariang_device"
+                android:background="@drawable/coner_two_right"
+                android:textColor="@color/color_state_bt_device" />
 
             <Button
                 android:id="@+id/bt_music_core"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/coner_four_light"
-                android:textColor="@color/white" android:layout_marginLeft="1dp"/>
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text ="@string/music_core_device"
+                android:background="@drawable/coner_no_center_dark"
+                android:textColor="@color/color_state_bt_device" />
 
             <Button
                 android:id="@+id/bt_california"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text ="@string/california_device"
                 android:layout_weight="1"
-                android:background="@drawable/coner_four_light" android:layout_marginLeft="1dp"/>
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:textColor="@color/color_state_bt_device"
+                android:background="@drawable/coner_two_top_dark" 
+               />
 
         
     </LinearLayout>
     
         <LinearLayout
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content" 
+            android:paddingTop="10dp"
+            android:paddingLeft="5dp"
+            android:background="@color/bg_section_search"
 			android:focusableInTouchMode="true">
 
 	       <EditText
 	            android:id="@+id/editTextSearch"
 	            android:layout_weight="2"
 	            android:layout_width="0dp"
+	            android:paddingRight="5dp"
 	            android:layout_height="40dp"
-	            android:hint="nhập tên bài hát"
+	            android:hint="@string/hint_search_for_name"
 	            android:text="" >
 
 	        </EditText>
 
-            <Spinner
+            <Button
                 android:id="@+id/button1"
-                android:layout_width="55dp"
-                android:layout_height="45dp"
-                android:background="@drawable/advsearch"/>
+                android:paddingRight="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/setting"/>
         </LinearLayout>
 
-
-        <RadioGroup 
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
-    <RadioButton android:id="@+id/radio_pirates"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/search_for_name"
-        android:onClick="onRadioButtonClicked"/>
-    <RadioButton android:id="@+id/radio_ninjas"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/search_for_lyric"
-        android:onClick="onRadioButtonClicked"/>
-    <RadioButton android:id="@+id/radio_ninjas"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/search_for_author"
-        android:onClick="onRadioButtonClicked"/>
-   </RadioGroup>
-        <ListView
-
-            android:id="@+id/lvDanhSach"
+        <RadioGroup
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:cacheColorHint="#00000000" >
+            android:background="@color/bg_section_search"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp" >
 
-        </ListView>
+            <RadioButton
+                android:id="@+id/radio_pirates"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onRadioButtonClicked"
+                android:paddingRight="5dp"
+                android:text="@string/search_for_name"
+                android:textColor="@color/black"
+                android:textSize="5pt" />
+
+            <RadioButton
+                android:id="@+id/radio_lyric"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onRadioButtonClicked"
+                android:paddingRight="5dp"
+                android:text="@string/search_for_lyric"
+                android:textColor="@color/black"
+                android:textSize="5pt" />
+
+            <RadioButton
+                android:id="@+id/radio_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onRadioButtonClicked"
+                android:text="@string/search_for_author"
+                android:textColor="@color/black"
+                android:textSize="5pt" />
+        </RadioGroup>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent" >
+
+                <ListView
+                    android:id="@+id/lvDanhSach"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:cacheColorHint="#00000000"
+                    android:visibility="gone" >
+
+                </ListView>
+
+                <ProgressBar
+                    android:id="@+id/progressBar1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="visible" />
+
+            </FrameLayout>
+        </LinearLayout>
         
 </LinearLayout>

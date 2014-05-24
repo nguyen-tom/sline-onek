@@ -1,9 +1,37 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
+    xmlns:android1="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="fill_parent"
     android:background="#ffffff"
+    android:orientation="vertical"
     tools:context=".AKaraActivity" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_line"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_back_home"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/sgroup"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:text="@string/app_name"
+            android:textSize="14pt"
+            android:textStyle="bold"
+            android:textColor="@color/background_title"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </LinearLayout>
 
 	<LinearLayout
 	    android:orientation="vertical"
@@ -41,4 +69,4 @@
 	       	android:text="Đang tải danh sách" />
 
 	</LinearLayout>
-</RelativeLayout>
+</LinearLayout>

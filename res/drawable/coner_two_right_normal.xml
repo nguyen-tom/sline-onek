@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:top="0dp" android:bottom="0dp" android:right="1px" >
+	
+    <shape android:shape="rectangle">
+			<gradient android:startColor="@color/background_title" android:endColor="@color/background_title" android:angle="270" />
+            <stroke android:color="@color/white" android:width="1px"/>
+			<corners android:radius="@dimen/coner_radius_list" />
+		</shape>
+	</item>
+	<item android:left="@dimen/coner_radius_list"  >
+	<shape android:shape="rectangle">
+			<gradient android:startColor="@color/background_title" android:endColor="@color/background_title"
+				 android:angle="270" />
+			<stroke android:color="@color/white" android:width="1px"/>
+		</shape>
+	</item>
+	<item android:left="@dimen/coner_radius_list" android:bottom="1px" android:top ="1px" >
+	<shape android:shape="rectangle">
+			<gradient android:startColor="@color/background_title" android:endColor="@color/background_title"
+				 android:angle="270" />
+			
+		</shape>
+	</item>
+	
+	
+</layer-list>
