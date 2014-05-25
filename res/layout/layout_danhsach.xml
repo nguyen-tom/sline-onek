@@ -127,14 +127,17 @@
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent" >
 
-                <ListView
+                <com.sgroup.skara.component.IndexableListView
                     android:id="@+id/lvDanhSach"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:scrollbars="vertical"
+                    android:fadingEdge="vertical"
                     android:cacheColorHint="#00000000"
+                    android:fastScrollEnabled="true"
                     android:visibility="gone" >
 
-                </ListView>
+                </com.sgroup.skara.component.IndexableListView>
 
                 <ProgressBar
                     android:id="@+id/progressBar1"
@@ -142,6 +145,13 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1px"
+                    android:background="@color/color_line"
+                    android:text="TextView" />
 
             </FrameLayout>
         </LinearLayout>

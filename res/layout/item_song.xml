@@ -4,48 +4,74 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="horizontal" >
-    
-    <TextView
-        android:id="@+id/txtmaso"
-        android:layout_height="fill_parent"
+
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:gravity="center"
-        android:padding = "5dp"
-        android:textSize="14pt"
-        android:text="55656"
-        
-         android:textStyle="bold"
-        android:textColor="@color/background_title" />
-    
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="5dp" 
-        android:paddingTop ="5dp"
-        android:paddingBottom ="5dp"
-        android:orientation="vertical" >
-        
-		  <TextView
-		      android:id="@+id/txtten"
-		      android:layout_height="wrap_content"
-		      android:layout_width="wrap_content"
-		      android:layout_marginTop="2dp"
-		      android:textSize="9pt"
-		      android:maxLines="2"
-		      android:ellipsize="end"
-		      android:text="1 2 3 Chia doi loi di dakfafjdsakf askdfas dadsad"
-		      android:textColor="#000000" />
-		  <TextView
-		      android:id="@+id/txtloi"
-		      android:layout_height="wrap_content"
-		      android:layout_width="wrap_content"
-		      android:layout_marginTop="2dp"
-		      android:textSize="15sp"
-		      android:lines="1"
-		      
-		      android:ellipsize="end"
-		      android:textStyle="italic"
-		      android:text="1 2 3 Chia doi loi ve adlafkasf asf...."
-		      android:textColor="#000000" />
-	</LinearLayout>
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/txtmaso"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="55656"
+                android:textColor="@color/background_title"
+                android:textSize="14pt"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp" >
+
+                <TextView
+                    android:id="@+id/txtten"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="1 2 3 Chia doi loi di dakfafjdsakf askdfas dadsad"
+                    android:textColor="#000000"
+                    android:textSize="9pt" />
+
+                <TextView
+                    android:id="@+id/txtloi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:text="1 2 3 Chia doi loi ve adlafkasf asf...."
+                    android:textColor="#000000"
+                    android:textSize="15sp"
+                    android:textStyle="italic" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/favorite"
+                />
+
+        </LinearLayout>
+
+    </RelativeLayout>
 </LinearLayout>
