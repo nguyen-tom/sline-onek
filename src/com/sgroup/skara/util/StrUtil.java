@@ -32,4 +32,19 @@ public class StrUtil {
    public static String nvl(final String str) {
        return str != null ? str : "";
    }
+   public static String getChar(String title){
+	   if(title != null){
+		   char t  = title.charAt(0);
+		     for(int i  =0; i < StringMatcher.unicode.length; ++i){
+			   for(int j=0; j<StringMatcher.unicode[i].length; ++j){
+				   if(t == StringMatcher.unicode[i][j]){
+					   return String.valueOf(StringMatcher.unicode[i][0]);
+				   }
+			   }
+		    }
+		   return String.valueOf(t);
+		     
+	   }
+	   return null;
+   }
 }

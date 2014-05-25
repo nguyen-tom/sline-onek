@@ -94,26 +94,26 @@ public class DBUtil {
 		}
 		return null;
 	}
-	private static final String ARIANG_LIST_SQL = "select code, name, author, lyrics, author from m_ariang order by name COLLATE UNICODE ";
+	private static final String ARIANG_LIST_SQL = "select code, name, lyrics, author from m_ariang order by sort ASC  ";
 
 	public static List<Song> getAriangList() {
 		return getListSong(ARIANG_LIST_SQL, null);
 	}
 
-	private static final String CALI_LIST_SQL = "select code,name, author, lyrics,author from m_cali order by name";
+	private static final String CALI_LIST_SQL = "select code, name, lyrics, author from m_cali order by sort ASC ";
     
 	public static String[][] getCaliforniaList() {
 		return getListRev(CALI_LIST_SQL, null);
 	}
-	private static final String MUSIC_CORE_LIST_SQL = "select code,name, author, lyrics from m_music_core order by name";
+	private static final String MUSIC_CORE_LIST_SQL = "select code, name, lyrics, author from m_music_core order by sort ASC ";
 
 	public static String[][] getMusicCoreList() {
-		return getListRev(CALI_LIST_SQL, null);
+		return getListRev(MUSIC_CORE_LIST_SQL, null);
 	}
-	private static final String FAVORITE_LIST_SQL = "select code,name, author, lyrics from m_music_core order by name";
+	private static final String FAVORITE_LIST_SQL = "select code, name, lyrics, author from m_music_core order by name COLLATE UNICODE ";
 
 	public static String[][] getFavoriteList() {
-		return getListRev(CALI_LIST_SQL, null);
+		return getListRev(FAVORITE_LIST_SQL, null);
 	}
 
 	private static final String SONG_IN_DEVICE_SQL = "select name, author, lyrics from %s where code=? order by name";
@@ -281,16 +281,16 @@ public class DBUtil {
 				"drop table if exists m_user",};
 
 		private final String[] CREATE_SQL = new String[] {
-				"create table m_ariang (id integer primary key, code text not null, name text not null, lyrics text not null,author text,type text,vol text )",
-				"create table m_cali (id integer primary key, code text not null, name text not null, lyrics text not null,author text,type text,vol text )",
-				"create table m_music_core (id integer primary key, code text not null, name text not null, lyrics text not null,author text,type text,vol text )",
-				"create table m_favorite (id integer primary key, code text not null, name text not null, lyrics text not null,author text,type text,vol text )",
+				"create table m_ariang (id integer primary key,sort text not null, code text not null, name text not null, lyrics text not null,author text,type text,vol text )",
+				"create table m_cali (id integer primary key, sort text not null,code text not null, name text not null, lyrics text not null,author text,type text,vol text )",
+				"create table m_music_core (id integer primary key, sort text not null,code text not null, name text not null, lyrics text not null,author text,type text,vol text )",
+				"create table m_favorite (id integer primary key, sort text not null,code text not null, name text not null, lyrics text not null,author text,type text,vol text )",
 				"create table m_user (id integer primary key, name text not null, pass text not null, device text not null, language text not null)",};
 		private final String[] INSERT_SQL = new String[] {
-				"insert into m_ariang (code, name, lyrics, author, type, vol) values (?, ?, ?, ?, ?, ?)",
-				"insert into m_cali (code, name, lyrics, author, type, vol) values (?, ?, ?, ?, ?, ?)",
-				"insert into m_music_core (code, name, lyrics, author, type, vol) values (?, ?, ?, ?, ?, ?)",
-				"insert into m_favorite (code, name, lyrics, author, type, vol) values (?, ?, ?, ?, ?, ?)",
+				"insert into m_ariang (sort,code, name, lyrics, author, type, vol) values (?,?, ?, ?, ?, ?, ?)",
+				"insert into m_cali (sort,code, name, lyrics, author, type, vol) values (?,?, ?, ?, ?, ?, ?)",
+				"insert into m_music_core (sort,code, name, lyrics, author, type, vol) values (?,?, ?, ?, ?, ?, ?)",
+				"insert into m_favorite (sort,code, name, lyrics, author, type, vol) values (?,?, ?, ?, ?, ?, ?)",
 				"insert into m_user (name, pass, device, language) values (?, ?, ?, ?)"};
 		private final String[] SELECT_SQL = new String[] {
 				"select max(id) from m_ariang ",};
@@ -342,7 +342,9 @@ public class DBUtil {
 								while((line = buff.readLine()) != null){
 									String[] arrValue = line.split("#");
 									if (arrValue.length > 3) {
-												int j = 1;
+										       int j = 1;
+										       //insert sort;
+												stmt.bindString(j++, StrUtil.getChar(arrValue[1])); // insearch sort
 												for(int i = 0; i < arrValue.length ;  ++i){
 													stmt.bindString(j++, arrValue[i]);
 													if(i >= 4) break;

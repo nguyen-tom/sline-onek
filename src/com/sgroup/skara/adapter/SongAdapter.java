@@ -1,26 +1,29 @@
 package com.sgroup.skara.adapter;
 
+import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
+import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.sgroup.skara.R;
 import com.sgroup.skara.model.Song;
+import com.sgroup.skara.util.StringMatcher;
 
-public class SongAdapter extends ArrayAdapter<Song> {
+public class SongAdapter extends ArrayAdapter<Song>  implements SectionIndexer{
 	
 	Context context         = null;
 	List<Song> myArray       = null;
 	int layoutId;
 	private LayoutInflater mInflater;
+	HashMap<String, Integer> alphaIndexer;
+	private String mSections = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	public SongAdapter(Fragment listSongFragment,List<Song>arr){
 		super(listSongFragment.getActivity(),
@@ -32,6 +35,7 @@ public class SongAdapter extends ArrayAdapter<Song> {
 		   mInflater  = listSongFragment.getActivity().getLayoutInflater();
            
 			this.context  = listSongFragment.getActivity();
+           
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -44,8 +48,6 @@ public class SongAdapter extends ArrayAdapter<Song> {
 			 holder.txtdisplay  =  (TextView) v.findViewById(R.id.txtmaso);
 			 holder.txtloi      =  (TextView) v.findViewById(R.id.txtloi);
 			 holder.txtten      =  (TextView) v.findViewById(R.id.txtten);
-			 holder.imgitem     =  (ImageView) v.findViewById(R.id.imgitem);
-			 holder.imgitem.setImageResource(R.drawable.mic);
 			 v.setTag(holder);
 		 }else{
 			 holder  = (SongHolder)v.getTag();
@@ -56,14 +58,7 @@ public class SongAdapter extends ArrayAdapter<Song> {
 				holder.txtten.setText(song.ten);
 				holder.txtloi.setText(song.loi);
 		 }
-		 holder.imgitem.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					//Toast.makeText(context, ">>ADD FAVORITE SONG>>"+emp.ten, 100).show();
-					//addFavoriteSong(emp);
-				}
-			});
+		
 		return v;
 	}
 	
@@ -81,6 +76,39 @@ public class SongAdapter extends ArrayAdapter<Song> {
 	@Override
 	public long getItemId(int position) {		
 		return myArray.get(position).hashCode();
+	}
+
+	@Override
+	public int getPositionForSection(int section) {
+		for (int i = section; i >= 0; i--) {
+			for (int j = 0; j < getCount(); j++) {
+				if (i == 0) {
+					// For numeric section
+					for (int k = 0; k <= 9; k++) {
+						if (StringMatcher.match(String.valueOf(getItem(j).ten.charAt(0)), String.valueOf(k)))
+							return j;
+					}
+				} else {
+					if (StringMatcher.match(String.valueOf(getItem(j).ten.charAt(0)), String.valueOf(mSections.charAt(i))))
+						return j;
+				}
+			}
+		}
+		return 0;
+	}
+
+	@Override
+	public int getSectionForPosition(int arg0) {
+		 return 0;
+	}
+
+	@Override
+	public Object[] getSections() {
+		// TODO Auto-generated method stub
+		String[] sections = new String[mSections.length()];
+		for (int i = 0; i < mSections.length(); i++)
+			sections[i] = String.valueOf(mSections.charAt(i));
+		return sections;
 	}
 
 
@@ -101,7 +129,6 @@ public class SongAdapter extends ArrayAdapter<Song> {
         }
 		
 		
-		ImageView imgitem;
 		TextView txtdisplay;
 		TextView txtten;
 		TextView txtloi;

@@ -21,16 +21,16 @@ import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.sgroup.skara.adapter.SongAdapter;
+import com.sgroup.skara.component.IndexableListView;
 import com.sgroup.skara.database.SharedPreferencesDB;
 import com.sgroup.skara.listener.DBListener;
 import com.sgroup.skara.listener.LoadingDataListener;
@@ -41,9 +41,8 @@ import com.sgroup.skara.util.Constant;
 import com.sgroup.skara.util.DBWorking;
 import com.sgroup.skara.util.DataLoading;
 import com.sgroup.skara.util.MultiSpinner;
-import com.sgroup.skara.util.MultiSpinner.MultiSpinnerListener;
 
-public class SongFragment extends Fragment  implements LoadingDataListener,DBListener{
+public class SongFragment extends Fragment  implements LoadingDataListener,DBListener, OnClickListener{
     private static final String TAG  = "SongFragment";
 	private int device   =  Constant.DEVICE_ARIRANG;
 	private int language =  Constant.VIETNAMESE;
@@ -60,49 +59,115 @@ public class SongFragment extends Fragment  implements LoadingDataListener,DBLis
 	private UserOption  userOption;
 	List<Song> danhSachBaiHat;
 	
+	private Button bt_Arirang;
+	private Button bt_California;
+	private Button bt_MisicCore;
+	private IndexableListView lvDanhSach;
+	private Button bt_searchOpt;
+	private EditText searchText;
+	private Button bt_Filter;
+	
+	private ProgressBar prgBar;
+	
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-
-		View rootView = inflater.inflate(R.layout.layout_danhsach,container, false);
-	    danhSachBaiHat  = new ArrayList<Song>();
-		songAdapter     = new SongAdapter(this, danhSachBaiHat);
-		dataloading     = new DataLoading(getActivity(), this);
-		
-		loadTabDanhSach(rootView);
-		loadGroupFilter(rootView);
-		Log.w("time", ">>LoadListView>>"+System.currentTimeMillis());
-		
-		//loadDataListView();
-//		handler= new Handler();
-//		r = new Runnable() {
-//			
-//			@Override
-//			public void run() {
-//				// TODO Auto-generated method stub
-//				LoadDataListView();
-//			}
-//		};
-//		handler.postDelayed(r, 500);
-//		Log.w("time", ">>LoadListView Complete>>"+System.currentTimeMillis());
-		
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+       super.onCreateView(inflater, container, savedInstanceState);
+          View rootView = inflater.inflate(R.layout.layout_danhsach,container, false);
+         initData();
+		 initView(rootView);
+		 loadTabDanhSach(rootView);
+		  //loadGroupFilter(rootView);
+		 Log.w("time", ">>LoadListView>>"+System.currentTimeMillis());
 		return rootView;
+	}
+	private void initView(View rootView){
+		
+		lvDanhSach = (IndexableListView)rootView.findViewById(R.id.lvDanhSach);
+		lvDanhSach.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				showDetail(songAdapter.getItem(arg2));
+				
+			}
+		});
+		
+		prgBar        = (ProgressBar) rootView.findViewById(R.id.progressBar1);
+		searchText    =  (EditText) rootView.findViewById(R.id.editTextSearch);
+		bt_searchOpt  = (Button) rootView.findViewById(R.id.button1);
+		bt_California = (Button) rootView.findViewById(R.id.bt_california);
+		bt_MisicCore  = (Button) rootView.findViewById(R.id.bt_music_core);
+		bt_Arirang    = (Button) rootView.findViewById(R.id.bt_ariang);
+		
+		bt_California.setOnClickListener(this);
+		bt_MisicCore.setOnClickListener(this);
+		bt_Arirang.setOnClickListener(this);
+		bt_Arirang.setSelected(true);
+		searchText.clearFocus();
+	}
+	@Override
+	public void onClick(View v) {
+		selectButton(v.getId());
+		if(v.getId()  == bt_Arirang.getId()){
+			if(this.device != Constant.DEVICE_ARIRANG){
+				this.device  = Constant.DEVICE_ARIRANG;
+				 loadDataListView();
+			}
+			
+		}else if(v.getId()  == bt_MisicCore.getId()){
+			if(this.device != Constant.DEVICE_MUSICCORE){
+				this.device  = Constant.DEVICE_MUSICCORE;
+				 loadDataListView();
+			}
+			
+		}else if(v.getId()  == bt_California.getId()){
+			if(this.device != Constant.DEVICE_CALIFORNIA){
+				this.device  = Constant.DEVICE_CALIFORNIA;
+				loadDataListView();
+			}
+		}else{
+			
+		}
+		
+	}
+	private void selectButton(int id){
+		if(id  == bt_Arirang.getId()){
+			bt_Arirang.setSelected(true);
+			bt_California.setSelected(false);
+			bt_MisicCore.setSelected(false);
+		}else if(id  == bt_MisicCore.getId()){
+			bt_Arirang.setSelected(false);
+			bt_California.setSelected(false);
+			bt_MisicCore.setSelected(true);
+		}else if(id == bt_California.getId()){
+			bt_Arirang.setSelected(false);
+			bt_California.setSelected(true);
+			bt_MisicCore.setSelected(false);
+		}else{
+			
+		}
+	}
+	private void initData(){
+		    danhSachBaiHat  = new ArrayList<Song>();
+			dataloading     = new DataLoading(getActivity(), this);
 	}
 	
 	@Override
 	public void onActivityCreated(Bundle save){
 		DBWorking dbWorking  = new DBWorking(this.getActivity(), this);
-		 dbWorking.execute();
+		dbWorking.execute();
+		showLoading();
 		super.onActivityCreated(save);
 		db = new SharedPreferencesDB(this.getActivity());
 		db.setEndchar(0);
-		loadData();
-		lvDanhSach.setAdapter(songAdapter);
 		lvDanhSach.setFastScrollEnabled(true);
 		((SKaraActivity)this.getActivity()).showLoading(false);
 	}
+
 	public void loadData(){
+		showLoading();
 		SharedPreferencesDB db = new SharedPreferencesDB(this.getActivity());
 		db.setDevice(device);
 		db.setLanguage(language);
@@ -113,33 +178,25 @@ public class SongFragment extends Fragment  implements LoadingDataListener,DBLis
 		dataloading.execute(userOption);
 		//lvDanhSach.setAdapter(songAdapter);
 	}
-	
+	private void showLoading(){
+		prgBar.setVisibility(View.VISIBLE);
+		lvDanhSach.setVisibility(View.GONE);
+	}
+	private void hideLoading(){
+		prgBar.setVisibility(View.GONE);
+		lvDanhSach.setVisibility(View.VISIBLE);
+	}
 	@Override
 	public void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
-		//Toast.makeText(getActivity(), ">>>>>>>"+tabId, 100).show();
 	}
 	
-	//@Override
-	//public void onActivityCreated(Bundle savedInstanceState) {
-	//	loadTabDanhSach();
-	//};
-	
-	private Button bt_Arirang;
-	private Button bt_California;
-	private Button bt_MisicCore;
-	private ListView lvDanhSach;
-	private Spinner bt_searchOpt;
-	private EditText searchText;
-	private Button bt_Filter;
 	
 	
 	String arrSearchOpt[]={"T??n b??i h??t", "L???i", "Nh???c s??", "Ca s??"};
 	public void loadTabDanhSach(View rootView)
 	{
-		searchText =(EditText) rootView.findViewById(R.id.editTextSearch);
-		searchText.clearFocus();
+		
 		searchText.setOnKeyListener(new OnKeyListener() {
 			
 			@Override
@@ -187,39 +244,30 @@ public class SongFragment extends Fragment  implements LoadingDataListener,DBLis
 			}
 		});
 		
-		lvDanhSach = (ListView)rootView.findViewById(R.id.lvDanhSach);
-		lvDanhSach.setOnItemClickListener(new OnItemClickListener() {
+		
 
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				showDetail(songAdapter.getItem(arg2));
-				
-			}
-		});
-
-		bt_searchOpt= (Spinner) rootView.findViewById(R.id.button1);
+		bt_searchOpt= (Button) rootView.findViewById(R.id.button1);
 		ArrayAdapter<String> adapter=new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, arrSearchOpt);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		bt_searchOpt.setAdapter(adapter);
-		bt_searchOpt.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view,
-					int position, long id) {
-				// TODO Auto-generated method stub
-				//((TextView)view).setText("");
-				searchField=(int) id;
-				String hint="Nh???p "+arrSearchOpt[(int) id];
-				searchText.setHint(hint);
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
+//		bt_searchOpt.setAdapter(adapter);
+//		bt_searchOpt.setOnItemSelectedListener(new OnItemSelectedListener() {
+//
+//			@Override
+//			public void onItemSelected(AdapterView<?> parent, View view,
+//					int position, long id) {
+//				// TODO Auto-generated method stub
+//				//((TextView)view).setText("");
+//				searchField=(int) id;
+//				String hint="Nh???p "+arrSearchOpt[(int) id];
+//				searchText.setHint(hint);
+//			}
+//
+//			@Override
+//			public void onNothingSelected(AdapterView<?> parent) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//		});
 		
 //		bt_Filter= (Button) rootView.findViewById(R.id.buttonFilter);
 //		bt_Filter.setOnClickListener(new OnClickListener() {
@@ -230,39 +278,6 @@ public class SongFragment extends Fragment  implements LoadingDataListener,DBLis
 //				showFilter();
 //			}
 //		});
-		
-		bt_Arirang= (Button) rootView.findViewById(R.id.bt_ariang);
-		bt_Arirang.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				device = Constant.DEVICE_ARIRANG;
-				 loadDataListView();
-				//main.getFrFavorite().loadDataListView();
-			}
-		});
-		bt_California= (Button) rootView.findViewById(R.id.bt_california);
-		bt_California.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				device  = Constant.DEVICE_CALIFORNIA;
-				loadDataListView();
-			}
-		});
-		bt_MisicCore= (Button) rootView.findViewById(R.id.bt_music_core);
-		bt_MisicCore.setOnClickListener(new OnClickListener(){
-			
-			@Override
-			public void onClick(View v) {
-				device  = Constant.DEVICE_MUSICCORE;
-				loadDataListView();
-				//main.getFrFavorite().loadDataListView();
-			}
-		});
-		
 	}	
 	
 	public int visibleFilter=View.GONE;
@@ -283,54 +298,54 @@ public class SongFragment extends Fragment  implements LoadingDataListener,DBLis
 	List<String> listKind = new ArrayList<String>(Arrays.asList("T??n nh???c","C??? nh???c","Thi???u nhi","Remix"));
 	List<String> listVol = new ArrayList<String>(Arrays.asList("Vol 1", "Vol 2", "Vol 3", "Vol 4", "Vol 5", "Vol 6", "Vol 7", "Vol 8", "Vol 9", "Vol 10",
 				"Vol 11", "Vol 12", "Vol 13", "Vol 14", "Vol 15", "Vol 16", "Vol 17", "Vol 18", "Vol 19", "Vol 20"));
-	public void loadGroupFilter(View rootView)
-	{
-		groupFilter= (LinearLayout) rootView.findViewById(R.id.groupoption);
-		groupFilter.setVisibility(visibleFilter);
-		
-		String arrLang[]={
-				"Ti???ng Vi???t",
-				"Ti???ng Anh"};
-		
-		languageOption= (Spinner) rootView.findViewById(R.id.spinner1);
-		ArrayAdapter<String> adapter=new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, arrLang);
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		languageOption.setAdapter(adapter);
-		languageOption.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view,int position, long id) {
-				device  = position;
-				
-				loadDataListView();
-				//main.getFrSong().loadDataListView();
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-		
-		volOption= (MultiSpinner) rootView.findViewById(R.id.spinner2);
-		volOption.setItems(listVol, "T???t c??? Vol",new MultiSpinnerListener() {
-			
-			@Override
-			public void onItemsSelected(boolean[] selected) {
-				// TODO Auto-generated method stub
-			}
-		});
-		
-		kindOption= (MultiSpinner) rootView.findViewById(R.id.spinner3);
-		kindOption.setItems(listKind, "T???t c??? th??? lo???i",new MultiSpinnerListener() {
-			
-			@Override
-			public void onItemsSelected(boolean[] selected) {
-				// TODO Auto-generated method stub
-			}
-		});
-	}
+//	public void loadGroupFilter(View rootView)
+//	{
+//		groupFilter= (LinearLayout) rootView.findViewById(R.id.groupoption);
+//		groupFilter.setVisibility(visibleFilter);
+//		
+//		String arrLang[]={
+//				"Ti???ng Vi???t",
+//				"Ti???ng Anh"};
+//		
+//		languageOption= (Spinner) rootView.findViewById(R.id.spinner1);
+//		ArrayAdapter<String> adapter=new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, arrLang);
+//		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//		languageOption.setAdapter(adapter);
+//		languageOption.setOnItemSelectedListener(new OnItemSelectedListener() {
+//
+//			@Override
+//			public void onItemSelected(AdapterView<?> parent, View view,int position, long id) {
+//				device  = position;
+//				
+//				loadDataListView();
+//				//main.getFrSong().loadDataListView();
+//			}
+//
+//			@Override
+//			public void onNothingSelected(AdapterView<?> parent) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//		});
+//		
+////		volOption= (MultiSpinner) rootView.findViewById(R.id.spinner2);
+////		volOption.setItems(listVol, "T???t c??? Vol",new MultiSpinnerListener() {
+////			
+////			@Override
+////			public void onItemsSelected(boolean[] selected) {
+////				// TODO Auto-generated method stub
+////			}
+////		});
+////		
+////		kindOption= (MultiSpinner) rootView.findViewById(R.id.spinner3);
+////		kindOption.setItems(listKind, "T???t c??? th??? lo???i",new MultiSpinnerListener() {
+////			
+////			@Override
+////			public void onItemsSelected(boolean[] selected) {
+////				// TODO Auto-generated method stub
+////			}
+////		});
+//	}
 	
 	
 	
@@ -412,14 +427,6 @@ public class SongFragment extends Fragment  implements LoadingDataListener,DBLis
 		songAdapter = new SongAdapter(this, rsEx);
 		lvDanhSach.setAdapter(songAdapter);
 	}
-	
-//	public void addFavoriteSong(Song bh)
-//	{
-//		if (tabId== ID_TAB_DANHSACH)
-//		  //fileUtil.
-//		else
-//			main.data.RemoveFavorite(bh);
-//	}
 
 	public int getTabId() {
 		return tabId;
@@ -427,10 +434,12 @@ public class SongFragment extends Fragment  implements LoadingDataListener,DBLis
 
 @Override
 public void callBack(Section lkSong) {
+    hideLoading();
 	Log.d(TAG,"Count List Result :" + lkSong.getLsSong().size());
 	Log.d(TAG,"ITEM FIRST :" + lkSong.getLsSong().get(0));
 	danhSachBaiHat.addAll(lkSong.getLsSong());
-	songAdapter.notifyDataSetChanged();
+	songAdapter     = new SongAdapter(this, danhSachBaiHat);
+	lvDanhSach.setAdapter(songAdapter);
 }
 
 @Override
@@ -447,9 +456,11 @@ public void loading(boolean show) {
 
 @Override
 public void loadedDB() {
+	loadData();
 	Toast.makeText(this.getActivity(), "LOADED DB", Toast.LENGTH_SHORT).show();
 	
 }
+
 
 	
 	
