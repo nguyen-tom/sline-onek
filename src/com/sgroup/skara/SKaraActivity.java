@@ -1,11 +1,14 @@
 package com.sgroup.skara;
 
+import java.io.UnsupportedEncodingException;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
@@ -67,13 +70,10 @@ public class SKaraActivity extends FragmentActivity implements LoadingDataListen
         
         //loading.setVisibility(View.GONE);
 	}
-	private void loadSectionToCache(){
-		
-		
-	}
 	@Override
 	public void onResume(){
 		super.onResume();
+		
 		 
 	}
 	public void showLoading(Boolean show){

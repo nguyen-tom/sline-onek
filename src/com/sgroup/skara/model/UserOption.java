@@ -11,7 +11,7 @@ public class UserOption {
 	public static final int VIETNAMESE        = 0;
 	public static final int ENGLISH           = 1;
 	
-	 public static final String[]LIST_DEVICE = {"arirang","california","musicCore"};
+	 public static final String[]LIST_DEVICE = {"m_ariang","m_california","m_music_core"};
 	 public static final String[]LIST_LANGUAGE = {"vi","en"};
      private int device;
      private int language;

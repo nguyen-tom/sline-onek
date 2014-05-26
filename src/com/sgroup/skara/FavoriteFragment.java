@@ -298,57 +298,6 @@ public class FavoriteFragment extends Fragment  implements LoadingDataListener,D
 	List<String> listKind = new ArrayList<String>(Arrays.asList("T??n nh???c","C??? nh???c","Thi???u nhi","Remix"));
 	List<String> listVol = new ArrayList<String>(Arrays.asList("Vol 1", "Vol 2", "Vol 3", "Vol 4", "Vol 5", "Vol 6", "Vol 7", "Vol 8", "Vol 9", "Vol 10",
 				"Vol 11", "Vol 12", "Vol 13", "Vol 14", "Vol 15", "Vol 16", "Vol 17", "Vol 18", "Vol 19", "Vol 20"));
-//	public void loadGroupFilter(View rootView)
-//	{
-//		groupFilter= (LinearLayout) rootView.findViewById(R.id.groupoption);
-//		groupFilter.setVisibility(visibleFilter);
-//		
-//		String arrLang[]={
-//				"Ti???ng Vi???t",
-//				"Ti???ng Anh"};
-//		
-//		languageOption= (Spinner) rootView.findViewById(R.id.spinner1);
-//		ArrayAdapter<String> adapter=new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, arrLang);
-//		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//		languageOption.setAdapter(adapter);
-//		languageOption.setOnItemSelectedListener(new OnItemSelectedListener() {
-//
-//			@Override
-//			public void onItemSelected(AdapterView<?> parent, View view,int position, long id) {
-//				device  = position;
-//				
-//				loadDataListView();
-//				//main.getFrSong().loadDataListView();
-//			}
-//
-//			@Override
-//			public void onNothingSelected(AdapterView<?> parent) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//		});
-//		
-////		volOption= (MultiSpinner) rootView.findViewById(R.id.spinner2);
-////		volOption.setItems(listVol, "T???t c??? Vol",new MultiSpinnerListener() {
-////			
-////			@Override
-////			public void onItemsSelected(boolean[] selected) {
-////				// TODO Auto-generated method stub
-////			}
-////		});
-////		
-////		kindOption= (MultiSpinner) rootView.findViewById(R.id.spinner3);
-////		kindOption.setItems(listKind, "T???t c??? th??? lo???i",new MultiSpinnerListener() {
-////			
-////			@Override
-////			public void onItemsSelected(boolean[] selected) {
-////				// TODO Auto-generated method stub
-////			}
-////		});
-//	}
-	
-	
-	
 	public void loadDataListView() {
 		 ((SKaraActivity)this.getActivity()).showLoading(false);
 		   danhSachBaiHat.clear();
@@ -364,15 +313,11 @@ public class FavoriteFragment extends Fragment  implements LoadingDataListener,D
 		songAdapter = new SongAdapter(this,danhSachBaiHat);
 		lvDanhSach.setAdapter(songAdapter);
 	}
-	
-	
 	public static String DATA_MESSAGE= "Songdata";
-	public void showDetail(Object bh)
-	{
+	public void showDetail(Object bh){
 		Song song = (Song)bh;
 		Intent intent = new Intent(getView().getContext(), SongDetail.class);
 		intent.putExtra(DATA_MESSAGE, song.toString());
-		intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 		startActivity(intent);
 	}
 
@@ -380,15 +325,15 @@ public class FavoriteFragment extends Fragment  implements LoadingDataListener,D
 	public Boolean Correct(String str, Song bh)
 	{
 		str=str.toLowerCase();
-		bh.ten=bh.ten.toLowerCase();
-		bh.loi=bh.loi.toLowerCase();
-		bh.nhacsi=bh.nhacsi.toLowerCase();
-		return (str.indexOf(bh.ten)>=0 || 
-				bh.ten.indexOf(str)>=0 ||
-				str.indexOf(bh.nhacsi)>=0 ||
-				bh.nhacsi.indexOf(str)>=0 ||
-				str.indexOf(bh.loi)>=0 ||
-				bh.loi.indexOf(str)>=0
+		bh.setName(bh.getName().toLowerCase());
+		bh.setLyric(bh.getLyric().toLowerCase());
+		bh.setAuthor(bh.getAuthor().toLowerCase());
+		return (str.indexOf(bh.getName())>=0 || 
+				bh.getName().indexOf(str)>=0 ||
+				str.indexOf(bh.getAuthor())>=0 ||
+				bh.getAuthor().indexOf(str)>=0 ||
+				str.indexOf(bh.getLyric())>=0 ||
+				bh.getLyric().indexOf(str)>=0
 				);
 	}
 	
@@ -435,11 +380,16 @@ public class FavoriteFragment extends Fragment  implements LoadingDataListener,D
 @Override
 public void callBack(Section lkSong) {
     hideLoading();
-	Log.d(TAG,"Count List Result :" + lkSong.getLsSong().size());
-	Log.d(TAG,"ITEM FIRST :" + lkSong.getLsSong().get(0));
-	danhSachBaiHat.addAll(lkSong.getLsSong());
-	songAdapter     = new SongAdapter(this, danhSachBaiHat);
-	lvDanhSach.setAdapter(songAdapter);
+    if(lkSong != null && lkSong.getLsSong().size() > 0){
+    	Log.d(TAG,"Count List Result :" + lkSong.getLsSong().size());
+    	Log.d(TAG,"ITEM FIRST :" + lkSong.getLsSong().get(0));
+    	danhSachBaiHat.addAll(lkSong.getLsSong());
+    	songAdapter     = new SongAdapter(this, danhSachBaiHat);
+    	lvDanhSach.setAdapter(songAdapter);
+    }else{
+    	Toast.makeText(getActivity(), "No Data", Toast.LENGTH_SHORT).show();
+    }
+	
 }
 
 @Override
@@ -456,7 +406,7 @@ public void loading(boolean show) {
 
 @Override
 public void loadedDB() {
-	loadData();
+	//loadData();
 	Toast.makeText(this.getActivity(), "LOADED DB", Toast.LENGTH_SHORT).show();
 	
 }

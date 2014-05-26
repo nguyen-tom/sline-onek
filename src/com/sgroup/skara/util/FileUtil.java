@@ -234,12 +234,12 @@ public class FileUtil {
 	}
    public void addFavorite(Context context,LinkSongs linkSongs,Song bh)
 	{
-		if (linkSongs.getLkFavorite().contains(bh.ten)){
-			Toast.makeText(context, "B??i h??t "+bh.ten+" ???? c?? trong danh s??ch y??u th??ch", 100).show();
+		if (linkSongs.getLkFavorite().contains(bh.getName())){
+			Toast.makeText(context, "B??i h??t "+bh.getName()+" ???? c?? trong danh s??ch y??u th??ch", 100).show();
 			return;
 		}
 		linkSongs.getLkFavorite().add(bh);
-		linkSongs.getListFavoriteName().add(bh.ten);
+		linkSongs.getListFavoriteName().add(bh.getName());
 		
 		//main.fragmentYeuThich.reLoadListSong(listFavoriteSong);
 		
@@ -262,12 +262,12 @@ public class FileUtil {
 			e.printStackTrace();
 		}	
 		
-		Toast.makeText(context, "???? th??m b??i h??t "+bh.ten+" v??o danh s??ch y??u th??ch", 100).show();
+		Toast.makeText(context, "???? th??m b??i h??t "+bh.getName()+" v??o danh s??ch y??u th??ch", 100).show();
 	}
    public void RemoveFavorite(SKaraActivity context,LinkSongs linkSongs,Song bh){
 	   
 	    linkSongs.getLkFavorite().remove(bh);
-	    linkSongs.getListFavoriteName().remove(bh.ten);
+	    linkSongs.getListFavoriteName().remove(bh.getName());
 		
 		context.getFrFavorite().reLoadListSong(linkSongs.getLkFavorite());
 		
@@ -289,7 +289,7 @@ public class FileUtil {
 			e.printStackTrace();
 		}	
 		
-		Toast.makeText(context, "???? x??a b??i h??t "+bh.ten+" kh???i danh s??ch y??u th??ch", 100).show();
+		Toast.makeText(context, "???? x??a b??i h??t "+bh.getName()+" kh???i danh s??ch y??u th??ch", 100).show();
 	}
    
     public static int countLines(UserOption userOption ) throws Exception {

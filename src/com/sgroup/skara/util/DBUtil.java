@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -94,18 +95,39 @@ public class DBUtil {
 		}
 		return null;
 	}
-	private static final String ARIANG_LIST_SQL = "select code, name, lyrics, author from m_ariang order by sort ASC  ";
+	private static final String ARIANG_LIST_SQL = "select code, "
+			                                            + "name, "
+			                                            + "lyrics, "
+			                                            + "author, "
+			                                            + "singer,"
+			                                            + "type,"
+			                                            + "favorite "
+			                                            + "from m_ariang order by sort ASC  ";
 
 	public static List<Song> getAriangList() {
 		return getListSong(ARIANG_LIST_SQL, null);
 	}
 
-	private static final String CALI_LIST_SQL = "select code, name, lyrics, author from m_cali order by sort ASC ";
+	private static final String CALI_LIST_SQL = "select code, "
+									            + "name, "
+									            + "lyrics, "
+									            + "author, "
+									            + "singer,"
+									            + "type,"
+									            + "favorite "
+									            + "from m_califorina order by sort ASC  ";
     
 	public static String[][] getCaliforniaList() {
 		return getListRev(CALI_LIST_SQL, null);
 	}
-	private static final String MUSIC_CORE_LIST_SQL = "select code, name, lyrics, author from m_music_core order by sort ASC ";
+	private static final String MUSIC_CORE_LIST_SQL = "select code, "
+													            + "name, "
+													            + "lyrics, "
+													            + "author, "
+													            + "singer,"
+													            + "type,"
+													            + "favorite "
+													            + "from m_califorina order by sort ASC  ";
 
 	public static String[][] getMusicCoreList() {
 		return getListRev(MUSIC_CORE_LIST_SQL, null);
@@ -114,6 +136,14 @@ public class DBUtil {
 
 	public static String[][] getFavoriteList() {
 		return getListRev(FAVORITE_LIST_SQL, null);
+	}
+	private static final String UPDATE_FAVORITE_BY_DEVICE = "UPDATE %s SET favorite= ? where code = ?";
+	public static boolean updateFavorite(String code,String favorite,String device){
+		String sql = String.format(UPDATE_FAVORITE_BY_DEVICE, device);
+		Log.d("DBUtil" , sql + "> Favorite :" + favorite + "> code:  " + code );
+		ContentValues content  = new ContentValues();
+		content.put("favorite", favorite);
+		return update(device,content,new String[]{code});
 	}
 
 	private static final String SONG_IN_DEVICE_SQL = "select name, author, lyrics from %s where code=? order by name";
@@ -125,6 +155,21 @@ public class DBUtil {
 		if (temp.length > 0) {
 			if (temp[0].length > 0)
 				result = temp[0][0];
+		}
+		return result;
+	}
+	private static boolean update(String table ,ContentValues content, final String[] args) {
+		boolean result = false;
+		if (helper != null) {
+			try {
+				final SQLiteDatabase db = helper.getReadableDatabase();
+					final int cursor = db.update(table,content , "code=?",args);
+					if(cursor > 0) {
+						return true;
+					}
+			} catch (final Exception e) {
+				Log.e(DBUtil.class.getName(), "## " + e.getMessage(), e);
+			}
 		}
 		return result;
 	}
@@ -167,10 +212,15 @@ public class DBUtil {
 					cursor.moveToFirst();
 					for (int r = 0; r < cursor.getCount(); r++) {
 						    int i  = 0;
-							Song song  = new Song(cursor.getString(i++),
-									              cursor.getString(i++),
-									              cursor.getString(i++),
-									              cursor.getString(i++));
+							Song song  = new Song();
+							song.setCode(cursor.getString(i++));
+							song.setName(cursor.getString(i++));
+							song.setLyric(cursor.getString(i++));
+							song.setAuthor(cursor.getString(i++));
+							song.setSinger(cursor.getString(i++));
+							song.setType(cursor.getString(i++));
+							song.setFavorite(cursor.getString(i++));
+							
 							result.add(song);
 						    cursor.moveToNext();
 					}
@@ -281,7 +331,16 @@ public class DBUtil {
 				"drop table if exists m_user",};
 
 		private final String[] CREATE_SQL = new String[] {
-				"create table m_ariang (id integer primary key,sort text not null, code text not null, name text not null, lyrics text not null,author text,type text,vol text )",
+				"create table m_ariang (id integer primary key,"//0
+				                     + "sort text not null, " //1
+				                     + "code text not null, "  //2
+				                     + "name text not null, "  //3
+				                     + "lyrics text not null,"  //4
+				                     + "author text default 'unknow',"  //5 
+				                     + "singer text default 'unknow',"  //6
+				                     + "type text default 'unknow',"   //7
+				                     + "vol text default 'unknow',"    //8
+				                     + "favorite text default '0' )", //9
 				"create table m_cali (id integer primary key, sort text not null,code text not null, name text not null, lyrics text not null,author text,type text,vol text )",
 				"create table m_music_core (id integer primary key, sort text not null,code text not null, name text not null, lyrics text not null,author text,type text,vol text )",
 				"create table m_favorite (id integer primary key, sort text not null,code text not null, name text not null, lyrics text not null,author text,type text,vol text )",
@@ -347,7 +406,7 @@ public class DBUtil {
 												stmt.bindString(j++, StrUtil.getChar(arrValue[1])); // insearch sort
 												for(int i = 0; i < arrValue.length ;  ++i){
 													stmt.bindString(j++, arrValue[i]);
-													if(i >= 4) break;
+													if(j > 7) break;
 												 }
 												stmt.executeInsert();
 												count++;
