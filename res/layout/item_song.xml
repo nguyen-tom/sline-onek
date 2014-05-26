@@ -64,11 +64,11 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/textView1"
+            <ImageView
+                android:id="@+id/text_favorite"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:background="@drawable/favorite"
+                android:src="@drawable/favorite"
                 />
 
         </LinearLayout>

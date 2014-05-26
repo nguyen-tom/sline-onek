@@ -23,6 +23,10 @@
     <string name="hint_search_author">Nhập tên nhạc sĩ</string>
     <string name="hint_search_casi">Nhập tên ca sĩ</string>
     
+    <string name="detail_author">Nhạc sĩ : %s</string>
+    <string name="detail_singer">Ca sĩ : %s</string>
+    <string name="detail_style">Thể Loại : %s</string>
+    
     <string-array name="tab_content">
         <item>Danh Sách</item>
         <item>Yêu Thích</item>
