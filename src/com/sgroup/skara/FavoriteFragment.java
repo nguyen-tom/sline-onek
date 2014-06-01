@@ -151,7 +151,7 @@ public class FavoriteFragment extends Fragment  implements LoadingDataListener,D
 	}
 	private void initData(){
 		    danhSachBaiHat  = new ArrayList<Song>();
-			dataloading     = new DataLoading(getActivity(), this);
+			dataloading     = new DataLoading(getActivity(), this,"i");
 	}
 	
 	@Override
@@ -174,7 +174,7 @@ public class FavoriteFragment extends Fragment  implements LoadingDataListener,D
 		userOption  = new UserOption();
 		userOption.setDevice(device);
 		userOption.setLanguage(language);
-		dataloading  = new DataLoading(getActivity(), this);
+		dataloading  = new DataLoading(getActivity(), this,"i");
 		dataloading.execute(userOption);
 		//lvDanhSach.setAdapter(songAdapter);
 	}

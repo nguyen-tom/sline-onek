@@ -7,6 +7,7 @@ import java.io.Reader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -14,6 +15,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
+import android.location.Location;
 import android.util.Log;
 
 import com.sgroup.skara.R;
@@ -44,6 +46,7 @@ public class DBUtil {
 					StrUtil.nvl(dbName).length() != 0 ? dbName : null, version);
 			try {
 				helper.getWritableDatabase();
+				helper.getWritableDatabase().setLocale(new Locale("VI","VN"));
 			} catch (Exception e) {
 				close();
 				helperDestroy();
@@ -107,6 +110,35 @@ public class DBUtil {
 	public static List<Song> getAriangList() {
 		return getListSong(ARIANG_LIST_SQL, null);
 	}
+	private static final String ARIANG_SEARCH_SQL = "select code, "
+            + "name, "
+            + "lyrics, "
+            + "author, "
+            + "singer,"
+            + "type,"
+            + "favorite "
+            + "from m_ariang ";
+	public static List<Song> searchAriangList(String key){
+		key  = key.toUpperCase();
+		key  = StrUtil.clearUnicodeString(key);
+		String sqlite  = ARIANG_SEARCH_SQL  + " where un_name like  '%" + key + "%' order by sort ASC";  
+		return getSongs(sqlite,null);
+	}
+	private static final String CALIFORNIA_SEARCH_SQL = "select code, "
+            + "name, "
+            + "lyrics, "
+            + "author, "
+            + "singer,"
+            + "type,"
+            + "favorite "
+            + "from m_california ";
+	public static List<Song> searchCaliforniaList(String key){
+		key  = key.toUpperCase();
+		key  = StrUtil.clearUnicodeString(key);
+		String sqlite  = CALIFORNIA_SEARCH_SQL  + " where un_name like  '%" + key + "%' order by sort ASC";  
+		return getSongs(sqlite,null);
+	}
+	
 
 	private static final String CALI_LIST_SQL = "select code, "
 									            + "name, "
@@ -199,6 +231,88 @@ public class DBUtil {
 		}
 		return result;
 	}
+	private static final String SQL_SELECT_ANPHABE  = "select code, "
+			                                            + "name, "
+			                                            + "lyrics, "
+			                                            + "author, "
+			                                            + "singer,"
+			                                            + "type,"
+			                                            + "favorite "
+			                                            + "from %s  where sort=? order by sort ASC limit 0,50 ";
+	public static List<Song> getSectionAnphabe(String device,String ch){
+		
+		List<Song> result = null;
+		if (helper != null) {
+			try {
+				String sql  = String.format(SQL_SELECT_ANPHABE, device);
+				final SQLiteDatabase db = helper.getReadableDatabase();
+				int limit = 0;
+				result  = new ArrayList<Song>();
+					final Cursor cursor = db.rawQuery(sql, new String[]{ch});
+					cursor.moveToFirst();
+					for (int r = 0; r < cursor.getCount(); r++) {
+						    int i  = 0;
+							Song song  = new Song();
+							song.setCode(cursor.getString(i++));
+							song.setName(cursor.getString(i++));
+							song.setLyric(cursor.getString(i++));
+							song.setAuthor(cursor.getString(i++));
+							song.setSinger(cursor.getString(i++));
+							song.setType(cursor.getString(i++));
+							song.setFavorite(cursor.getString(i++));
+							result.add(song);
+						    cursor.moveToNext();
+					}
+					cursor.close();
+					Log.w("DBUtil","Char[" + ch + "]" + " device[" + device +"] = "  + result.size());
+					
+				
+				
+			} catch (final Exception e) {
+				Log.e(DBUtil.class.getName(), "## " + e.getMessage(), e);
+			}
+		}
+		return result;
+	}
+	public static List<Song> getSongs(final String sql,final String[] args){
+		List<Song> result = null;
+		if (helper != null) {
+			try {
+				final SQLiteDatabase db = helper.getReadableDatabase();
+				int limit = 0;
+				result  = new ArrayList<Song>();
+				
+					String sqlLimit = sql + " LIMIT " + limit  + ", 200";
+					final Cursor cursor = db.rawQuery(sqlLimit, args);
+					cursor.moveToFirst();
+					for (int r = 0; r < cursor.getCount(); r++) {
+						    int i  = 0;
+							Song song  = new Song();
+							song.setCode(cursor.getString(i++));
+							song.setName(cursor.getString(i++));
+							song.setLyric(cursor.getString(i++));
+							song.setAuthor(cursor.getString(i++));
+							song.setSinger(cursor.getString(i++));
+							song.setType(cursor.getString(i++));
+							song.setFavorite(cursor.getString(i++));
+							
+							result.add(song);
+						    cursor.moveToNext();
+					}
+					cursor.close();
+					limit  = limit + 500;
+					for(String item : args){
+						Log.w("DBUtil","Item[" + item + "]");
+					}
+					Log.w("DBUtil","Limit :" + limit + " , Array Count :" + result.size());
+				
+				
+			} catch (final Exception e) {
+				Log.e(DBUtil.class.getName(), "## " + e.getMessage(), e);
+			}
+		}
+		return result;
+	}
 	private static List<Song> getListSong(final String sql, final String[] args) {
 		List<Song> result = null;
 		if (helper != null) {
@@ -206,7 +320,7 @@ public class DBUtil {
 				final SQLiteDatabase db = helper.getReadableDatabase();
 				int limit = 0;
 				result  = new ArrayList<Song>();
-				while(limit + 500 <= 7800){
+				while(limit + 500 <= 2000){
 					String sqlLimit = sql + " LIMIT " + limit  + ", 500";
 					final Cursor cursor = db.rawQuery(sqlLimit, args);
 					cursor.moveToFirst();
@@ -333,23 +447,24 @@ public class DBUtil {
 		private final String[] CREATE_SQL = new String[] {
 				"create table m_ariang (id integer primary key,"//0
 				                     + "sort text not null, " //1
-				                     + "code text not null, "  //2
-				                     + "name text not null, "  //3
-				                     + "lyrics text not null,"  //4
-				                     + "author text default 'unknow',"  //5 
-				                     + "singer text default 'unknow',"  //6
-				                     + "type text default 'unknow',"   //7
-				                     + "vol text default 'unknow',"    //8
-				                     + "favorite text default '0' )", //9
-				"create table m_cali (id integer primary key, sort text not null,code text not null, name text not null, lyrics text not null,author text,type text,vol text )",
-				"create table m_music_core (id integer primary key, sort text not null,code text not null, name text not null, lyrics text not null,author text,type text,vol text )",
-				"create table m_favorite (id integer primary key, sort text not null,code text not null, name text not null, lyrics text not null,author text,type text,vol text )",
+				                     + "un_name text not null, "  //2
+				                     + "code text not null, "  //3
+				                     + "name text not null, "  //4
+				                     + "lyrics text not null,"  //5
+				                     + "author text default 'unknow',"  //6
+				                     + "singer text default 'unknow',"  //7
+				                     + "type text default 'unknow',"   //8
+				                     + "vol text default 'unknow',"    //9
+				                     + "favorite text default '0' )", //10
+				"create table m_cali (id integer primary key, sort text not null,un_name text not null,code text not null, name text not null, lyrics text not null,author text,type text,vol text )",
+				"create table m_music_core (id integer primary key, sort text not null,un_name text not null,code text not null, name text not null, lyrics text not null,author text,type text,vol text )",
+				"create table m_favorite (id integer primary key, sort text not null,un_name text not null,code text not null, name text not null, lyrics text not null,author text,type text,vol text )",
 				"create table m_user (id integer primary key, name text not null, pass text not null, device text not null, language text not null)",};
 		private final String[] INSERT_SQL = new String[] {
-				"insert into m_ariang (sort,code, name, lyrics, author, type, vol) values (?,?, ?, ?, ?, ?, ?)",
-				"insert into m_cali (sort,code, name, lyrics, author, type, vol) values (?,?, ?, ?, ?, ?, ?)",
-				"insert into m_music_core (sort,code, name, lyrics, author, type, vol) values (?,?, ?, ?, ?, ?, ?)",
-				"insert into m_favorite (sort,code, name, lyrics, author, type, vol) values (?,?, ?, ?, ?, ?, ?)",
+				"insert into m_ariang (sort,un_name,code, name, lyrics, author, type, vol) values     (?, ?, ?, ?, ?, ?, ?, ?)",
+				"insert into m_cali   (sort,un_name,code, name, lyrics, author, type, vol) values       (?, ?, ?, ?, ?, ?, ?, ?)",
+				"insert into m_music_core (sort,un_name,code, name, lyrics, author, type, vol) values (?, ?, ?, ?, ?, ?, ?, ?)",
+				"insert into m_favorite   (sort,un_name,code, name, lyrics, author, type, vol) values   (?, ?, ?, ?, ?, ?, ?, ?)",
 				"insert into m_user (name, pass, device, language) values (?, ?, ?, ?)"};
 		private final String[] SELECT_SQL = new String[] {
 				"select max(id) from m_ariang ",};
@@ -404,9 +519,10 @@ public class DBUtil {
 										       int j = 1;
 										       //insert sort;
 												stmt.bindString(j++, StrUtil.getChar(arrValue[1])); // insearch sort
+												stmt.bindString(j++, StrUtil.clearUnicodeString(arrValue[1]));
 												for(int i = 0; i < arrValue.length ;  ++i){
 													stmt.bindString(j++, arrValue[i]);
-													if(j > 7) break;
+													if(j > 8) break;
 												 }
 												stmt.executeInsert();
 												count++;

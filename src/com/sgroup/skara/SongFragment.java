@@ -2,6 +2,7 @@ package com.sgroup.skara;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,8 +38,11 @@ import com.sgroup.skara.listener.LoadingDataListener;
 import com.sgroup.skara.model.Section;
 import com.sgroup.skara.model.Song;
 import com.sgroup.skara.model.UserOption;
+import com.sgroup.skara.thread.ManagerSectionTask;
+import com.sgroup.skara.thread.ParamOfSectionRunnable;
+import com.sgroup.skara.thread.SectionTask;
 import com.sgroup.skara.util.Constant;
-import com.sgroup.skara.util.DBWorking;
+import com.sgroup.skara.util.DBUtil;
 import com.sgroup.skara.util.DataLoading;
 import com.sgroup.skara.util.MultiSpinner;
 
@@ -52,7 +56,7 @@ public class SongFragment extends Fragment  implements LoadingDataListener,DBLis
 	private HashMap<String,Integer> param  = new HashMap<String,Integer>();
 	private int searchField = Song.ID_FIELD_TEN;
 	public Handler handler;
-	private DataLoading dataloading;
+	private List<DataLoading> dataloading;
 	public Runnable r;
 	private SongAdapter songAdapter;
 	String data;
@@ -157,13 +161,26 @@ public class SongFragment extends Fragment  implements LoadingDataListener,DBLis
 	}
 	private void initData(){
 		    danhSachBaiHat  = new ArrayList<Song>();
-			dataloading     = new DataLoading(getActivity(), this);
+		    String mSections = "123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		    dataloading = new ArrayList<DataLoading>();
+		    for(int i =0 ; i< mSections.length() ;++i){
+		    	ParamOfSectionRunnable param = new ParamOfSectionRunnable();
+		    	param.setCharFillter(mSections.substring(i, i +1));
+		    	param.setDevice(UserOption.LIST_DEVICE[0]);
+		    	param.setSongFragment(this);
+		    	SectionTask dataSection     = ManagerSectionTask.startDownload(param, true);
+		    }
+			
+	}
+	private void loadSectionData(){
+		for(DataLoading data: dataloading){
+	    	data.execute();
+	    }
 	}
 	
 	@Override
 	public void onActivityCreated(Bundle save){
-		DBWorking dbWorking  = new DBWorking(this.getActivity(), this);
-		dbWorking.execute();
+		loadSectionData();
 		showLoading();
 		super.onActivityCreated(save);
 		db = new SharedPreferencesDB(this.getActivity());
@@ -180,8 +197,9 @@ public class SongFragment extends Fragment  implements LoadingDataListener,DBLis
 		userOption  = new UserOption();
 		userOption.setDevice(device);
 		userOption.setLanguage(language);
-		dataloading  = new DataLoading(getActivity(), this);
-		dataloading.execute(userOption);
+		
+		//dataloading  = new DataLoading(getActivity(), this);
+		//dataloading.execute(userOption);
 		//lvDanhSach.setAdapter(songAdapter);
 	}
 	private void showLoading(){
@@ -243,7 +261,7 @@ public class SongFragment extends Fragment  implements LoadingDataListener,DBLis
 					public void run() {
 						// TODO Auto-generated method stub
 						Log.w("search", ">>Timecal draw loading>>"+System.currentTimeMillis());
-						Search(searchText.getText().toString());
+						search(searchText.getText().toString());
 					}
 				};
 				handler.postDelayed(r, 1500);
@@ -359,13 +377,24 @@ public class SongFragment extends Fragment  implements LoadingDataListener,DBLis
 		for (int i=0; i<danhSachBaiHat.size(); i++)
 			if (Correct(txt, danhSachBaiHat.get(i)))
 			{
-				rs.add(danhSachBaiHat.get(i));
+				//rs.add(danhSachBaiHat.get(i));
 			}
 		
 		songAdapter = new SongAdapter(this, rs);
 		lvDanhSach.setAdapter(songAdapter);
 		
 	}
+	private void search(String key){
+		List<Song> lsSong  = DBUtil.searchAriangList(key);
+		if(lsSong != null){
+			danhSachBaiHat.clear();
+			danhSachBaiHat.addAll(lsSong);
+			songAdapter.notifyDataSetChanged();
+		}else{
+			Toast.makeText(getActivity(), "FIND NO RECORD" , Toast.LENGTH_SHORT).show();
+		}
+	}
+	
 	
 	public void Search(String key) {
 		LinkedList<Song> rsEx= new LinkedList<Song>();
@@ -395,11 +424,12 @@ public class SongFragment extends Fragment  implements LoadingDataListener,DBLis
 	}
 
 @Override
-public void callBack(Section lkSong) {
+public synchronized void callBack(Section lkSong) {
     hideLoading();
     if(lkSong != null && lkSong.getLsSong().size() > 0){
     	Log.d(TAG,"Count List Result :" + lkSong.getLsSong().size());
     	Log.d(TAG,"ITEM FIRST :" + lkSong.getLsSong().get(0));
+    	Collections.sort(lkSong.getLsSong());
     	danhSachBaiHat.addAll(lkSong.getLsSong());
     	songAdapter     = new SongAdapter(this, danhSachBaiHat);
     	lvDanhSach.setAdapter(songAdapter);

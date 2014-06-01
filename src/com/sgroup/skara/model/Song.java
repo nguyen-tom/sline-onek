@@ -4,7 +4,7 @@ import com.sgroup.skara.util.StrUtil;
 import com.sgroup.skara.util.StringMatcher;
 
 
-public class Song {
+public class Song implements Comparable<Song>{
 	
 	public static int RESULF_FIND_NONE = 0;
 	public static int RESULF_FIND_EXACT = 1;
@@ -109,6 +109,7 @@ public class Song {
 		return vol;
 	}
 	public void setVol(String vol) {
+		if(StrUtil.isNullString(vol)) this.vol  = "Unknown";
 		this.vol = vol;
 	}
 	public String getCode() {
@@ -127,25 +128,33 @@ public class Song {
 		return author;
 	}
 	public void setAuthor(String author) {
+		if(StrUtil.isNullString(author)) this.author  = "Unknown";
 		this.author = author;
 	}
 	public String getType() {
 		return type;
 	}
 	public void setType(String type) {
+		if(StrUtil.isNullString(type)) this.type  = "Unknown";
 		this.type = type;
 	}
 	public String getLyric() {
 		return lyric;
 	}
 	public void setLyric(String lyric) {
+		if(StrUtil.isNullString(lyric)) this.lyric  = "Đang cập nhật..";
 		this.lyric = lyric;
 	}
 	public String getSinger() {
 		return singer;
 	}
 	public void setSinger(String singer) {
+		if(StrUtil.isNullString(singer)) this.singer  = "Unknown";
 		this.singer = singer;
+	}
+	@Override
+	public int compareTo(Song another) {
+		return another.getName().compareTo(this.getName());
 	}
 	 
 }

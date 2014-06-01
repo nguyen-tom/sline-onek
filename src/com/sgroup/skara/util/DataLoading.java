@@ -25,10 +25,12 @@ public class DataLoading extends AsyncTask<UserOption, Integer, Section> {
 	private Context context;
 	private FileUtil fileUtil;
 	private UserOption userOption;
+	private String charFilter;
 	
-	public DataLoading(Context context,LoadingDataListener listerner){
+	public DataLoading(Context context,LoadingDataListener listerner,String charFilter){
 		this.context  = context;
 		this.ldListener  = listerner;
+		this.charFilter = charFilter;
 	}
 	@Override
 	protected void onPreExecute() {
@@ -43,10 +45,14 @@ public class DataLoading extends AsyncTask<UserOption, Integer, Section> {
 		  if(userOption != null){
 		  
 	       try {
-			SharedPreferencesDB share  = new SharedPreferencesDB(context);
-			List<Song> arrStr  = DBUtil.getAriangList();
-			section = new Section();
-			section.setLsSong(arrStr);
+			//String mSections = "123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+				List<Song> arrStr  = DBUtil.getSectionAnphabe(
+						UserOption.LIST_DEVICE[userOption.getDevice()],
+						charFilter);
+				section = new Section();
+				section.setLsSong(arrStr);
+				
+			
 			//section = fileUtil.getSection(context, userOption,share.getEndChar(),);
 			//share.setEndchar(section.getEndChar());
 		} catch (Exception e) {
@@ -64,6 +70,7 @@ public class DataLoading extends AsyncTask<UserOption, Integer, Section> {
 			ldListener.error(resource.getString(R.string.error_loading));
 		}
 	}
+	
 	
 	
 
