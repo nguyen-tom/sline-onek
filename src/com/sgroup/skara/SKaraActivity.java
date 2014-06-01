@@ -1,6 +1,9 @@
 package com.sgroup.skara;
 
 
+
+
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -13,6 +16,9 @@ import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.sgroup.skara.FavoriteFragment;
+import com.sgroup.skara.R;
+import com.sgroup.skara.SongFragment;
 import com.sgroup.skara.listener.LoadingDataListener;
 import com.sgroup.skara.model.Section;
 import com.sgroup.skara.util.DBUtil;
