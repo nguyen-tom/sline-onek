@@ -14,11 +14,12 @@
         android:label="@string/app_name"
          >
         <activity
-            android:name="com.sgroup.skara.SkaraActivity"
+            android:name="com.sgroup.skara.SKaraActivity"
+            android:theme="@style/Theme.PageIndicatorDefaults"
+            android:configChanges="keyboardHidden|orientation"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
