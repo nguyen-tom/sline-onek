@@ -163,8 +163,8 @@ public class FavoriteFragment extends Fragment  implements LoadingDataListener,D
 	
 	@Override
 	public void onActivityCreated(Bundle save){
-		DBWorking dbWorking  = new DBWorking(this.getActivity(), this);
-		dbWorking.execute();
+		//DBWorking dbWorking  = new DBWorking(this.getActivity(), this);
+		//dbWorking.execute();
 		showLoading();
 		super.onActivityCreated(save);
 		db = new SharedPreferencesDB(this.getActivity());
@@ -181,8 +181,8 @@ public class FavoriteFragment extends Fragment  implements LoadingDataListener,D
 		userOption  = new UserOption();
 		userOption.setDevice(device);
 		userOption.setLanguage(language);
-		dataloading  = new DataLoading(getActivity(), this);
-		dataloading.execute(userOption);
+		//dataloading  = new DataLoading(getActivity(), this);
+		//dataloading.execute(userOption);
 		//lvDanhSach.setAdapter(songAdapter);
 	}
 	private void showLoading(){
@@ -211,7 +211,7 @@ public class FavoriteFragment extends Fragment  implements LoadingDataListener,D
 				// TODO Auto-generated method stub
 				if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
 					handler.removeCallbacks(r);
-					Search(searchText.getText().toString());
+					search(searchText.getText().toString());
                     return true;
 				}
 				return false;
@@ -244,7 +244,7 @@ public class FavoriteFragment extends Fragment  implements LoadingDataListener,D
 					public void run() {
 						// TODO Auto-generated method stub
 						Log.w("search", ">>Timecal draw loading>>"+System.currentTimeMillis());
-						Search(searchText.getText().toString());
+						search(searchText.getText().toString());
 					}
 				};
 				handler.postDelayed(r, 1500);
@@ -354,12 +354,13 @@ public class FavoriteFragment extends Fragment  implements LoadingDataListener,D
 				bh.getLyric().indexOf(str)>=0
 				);
 	}
-	public void Search(String key) {
-		List<Song> lsSong  = DBUtil.searchAriangList(key);
+	public void search(String key) {
+		SharedPreferencesDB db  = new SharedPreferencesDB(this.getActivity());
+		List<Song> lsSong  = DBUtil.searchAriangList(UserOption.LIST_DEVICE[db.getDevice()],key);
 		if(lsSong != null){
 			danhSachBaiHat.clear();
 			danhSachBaiHat.addAll(lsSong);
-			songAdapter.notifyDataSetChanged();
+			if(songAdapter!= null )songAdapter.notifyDataSetChanged();
 		}else{
 			Toast.makeText(getActivity(), "FIND NO RECORD" , Toast.LENGTH_SHORT).show();
 		}

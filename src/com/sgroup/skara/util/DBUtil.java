@@ -110,18 +110,19 @@ public class DBUtil {
 	public static List<Song> getAriangList() {
 		return getListSong(ARIANG_LIST_SQL, null);
 	}
-	private static final String ARIANG_SEARCH_SQL = "select code, "
+	private static final String SEARCH_SQL = "select code, "
             + "name, "
             + "lyrics, "
             + "author, "
             + "singer,"
             + "type,"
             + "favorite "
-            + "from m_ariang ";
-	public static List<Song> searchAriangList(String key){
+            + "from %s ";
+	public static List<Song> searchAriangList(String device,String key){
 		key  = key.toUpperCase();
 		key  = StrUtil.clearUnicodeString(key);
-		String sqlite  = ARIANG_SEARCH_SQL  + " where un_name like  '%" + key + "%' order by sort ASC";  
+		String sqlite  = String.format(SEARCH_SQL, device);
+		 sqlite  = sqlite  + " where un_name like  '%" + key + "%' order by sort ASC";  
 		return getSongs(sqlite,null);
 	}
 	private static final String CALIFORNIA_SEARCH_SQL = "select code, "
@@ -320,7 +321,7 @@ public class DBUtil {
 				final SQLiteDatabase db = helper.getReadableDatabase();
 				int limit = 0;
 				result  = new ArrayList<Song>();
-				while(limit + 500 <= 2000){
+				while(limit + 500 <= 7500){
 					String sqlLimit = sql + " LIMIT " + limit  + ", 500";
 					final Cursor cursor = db.rawQuery(sqlLimit, args);
 					cursor.moveToFirst();

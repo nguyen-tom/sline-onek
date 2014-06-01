@@ -211,7 +211,7 @@ public class SongFragment extends Fragment  implements LoadingDataListener,DBLis
 				// TODO Auto-generated method stub
 				if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
 					handler.removeCallbacks(r);
-					Search(searchText.getText().toString());
+					search(searchText.getText().toString());
                     return true;
 				}
 				return false;
@@ -244,7 +244,7 @@ public class SongFragment extends Fragment  implements LoadingDataListener,DBLis
 					public void run() {
 						// TODO Auto-generated method stub
 						Log.w("search", ">>Timecal draw loading>>"+System.currentTimeMillis());
-						Search(searchText.getText().toString());
+						search(searchText.getText().toString());
 					}
 				};
 				handler.postDelayed(r, 1500);
@@ -354,12 +354,13 @@ public class SongFragment extends Fragment  implements LoadingDataListener,DBLis
 				bh.getLyric().indexOf(str)>=0
 				);
 	}
-	public void Search(String key) {
-		List<Song> lsSong  = DBUtil.searchAriangList(key);
+	public void search(String key) {
+		SharedPreferencesDB db  = new SharedPreferencesDB(this.getActivity());
+		List<Song> lsSong  = DBUtil.searchAriangList(UserOption.LIST_DEVICE[db.getDevice()],key);
 		if(lsSong != null){
 			danhSachBaiHat.clear();
 			danhSachBaiHat.addAll(lsSong);
-			songAdapter.notifyDataSetChanged();
+			if(songAdapter!= null )songAdapter.notifyDataSetChanged();
 		}else{
 			Toast.makeText(getActivity(), "FIND NO RECORD" , Toast.LENGTH_SHORT).show();
 		}
