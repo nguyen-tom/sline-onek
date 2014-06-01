@@ -1,5 +1,8 @@
 package com.sgroup.skara.util;
 
+
+
+
 import com.sgroup.skara.model.UserOption;
 
 public class StrUtil {
@@ -47,4 +50,20 @@ public class StrUtil {
 	   }
 	   return null;
    }
+   
+   public static String clearUnicodeString(String title){
+	   if(title != null){
+		    for(int i = 0; i < title.length(); ++i){
+		    	for(int j =0; j < StringMatcher.unicode.length; ++j){
+		    		for(int k=0; k < StringMatcher.unicode[j].length; ++k){
+		    			if( title.charAt(i) == StringMatcher.unicode[j][k]){
+		    				title = title.replace(title.charAt(i), StringMatcher.unicode[j][0]);
+		    			}
+		    		}
+		    	}
+		    }
+		   return title;
+	   }
+	   return null;
+  }
 }

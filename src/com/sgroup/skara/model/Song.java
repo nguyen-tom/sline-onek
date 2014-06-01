@@ -74,20 +74,6 @@ public class Song {
 		}
 		return str;
 	}
-	
-	public int Compare(String key, int[] field)
-	{
-		String str = SimplifiedString(key);
-		for (int i=0; i<field.length; i++)
-		{
-			if (str.compareTo(fieldForSearch[field[i]]) == 0)
-				return RESULF_FIND_EXACT;
-			if (fieldForSearch[field[i]].indexOf(str)>=0)
-				return RESULF_FIND_CONTANT;
-		}
-		return RESULF_FIND_NONE;
-	}
-	
 	@Override
 	public String toString() {
 		return code+"#"

@@ -38,12 +38,15 @@ import com.sgroup.skara.model.Section;
 import com.sgroup.skara.model.Song;
 import com.sgroup.skara.model.UserOption;
 import com.sgroup.skara.util.Constant;
+import com.sgroup.skara.util.DBUtil;
 import com.sgroup.skara.util.DBWorking;
 import com.sgroup.skara.util.DataLoading;
 import com.sgroup.skara.util.MultiSpinner;
 
 public class FavoriteFragment extends Fragment  implements LoadingDataListener,DBListener, OnClickListener{
     private static final String TAG  = "SongFragment";
+    public static final int PICK_UP_ITEM = 122;
+    public static final  String POST_ITEM   = "item_post";
 	private int device   =  Constant.DEVICE_ARIRANG;
 	private int language =  Constant.VIETNAMESE;
 	private int tabId;
@@ -58,6 +61,8 @@ public class FavoriteFragment extends Fragment  implements LoadingDataListener,D
 	SharedPreferencesDB db ;
 	private UserOption  userOption;
 	List<Song> danhSachBaiHat;
+	private int positionClicked;
+	
 	
 	private Button bt_Arirang;
 	private Button bt_California;
@@ -90,6 +95,8 @@ public class FavoriteFragment extends Fragment  implements LoadingDataListener,D
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				showDetail(songAdapter.getItem(arg2));
+				positionClicked = arg2;
+				Log.d("SONG FRAGMENT :", "POSITION :" + positionClicked );
 				
 			}
 		});
@@ -318,10 +325,21 @@ public class FavoriteFragment extends Fragment  implements LoadingDataListener,D
 		Song song = (Song)bh;
 		Intent intent = new Intent(getView().getContext(), SongDetail.class);
 		intent.putExtra(DATA_MESSAGE, song.toString());
-		startActivity(intent);
+		startActivityForResult(intent, PICK_UP_ITEM);
 	}
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+	    // Check which request it is that we're responding to
+	    if (requestCode == PICK_UP_ITEM && data != null) {
+	    	   String favorite = data.getStringExtra("favorite");
+	    	   if(danhSachBaiHat != null && danhSachBaiHat.size() > 0){
+	    		   Log.d("SONG FRAGMENT :", "Result :" + positionClicked  + " favorite :" + favorite);
+	    		    danhSachBaiHat.get(positionClicked).setFavorite(favorite);
+		    		songAdapter.notifyDataSetChanged();
+	    	   }
+	    }
 
-	
+	 }
 	public Boolean Correct(String str, Song bh)
 	{
 		str=str.toLowerCase();
@@ -336,41 +354,15 @@ public class FavoriteFragment extends Fragment  implements LoadingDataListener,D
 				bh.getLyric().indexOf(str)>=0
 				);
 	}
-	
-	public void Search1(String txt){
-		LinkedList<Song> rs= new LinkedList<Song>();
-		for (int i=0; i<danhSachBaiHat.size(); i++)
-			if (Correct(txt, danhSachBaiHat.get(i)))
-			{
-				rs.add(danhSachBaiHat.get(i));
-			}
-		
-		songAdapter = new SongAdapter(this, rs);
-		lvDanhSach.setAdapter(songAdapter);
-		
-	}
-	
 	public void Search(String key) {
-		LinkedList<Song> rsEx= new LinkedList<Song>();
-		LinkedList<Song> rsCt= new LinkedList<Song>();
-		int l=danhSachBaiHat.size();
-		for (int i=0; i<l; i++)
-		{
-			Song bh = danhSachBaiHat.get(i);
-			int rs = bh.Compare(key, new int[]{searchField});
-			if (rs==Song.RESULF_FIND_EXACT)
-			{
-				rsEx.add(bh);
-			}
-			if (rs==Song.RESULF_FIND_CONTANT)
-			{
-				rsCt.add(bh);
-			}
+		List<Song> lsSong  = DBUtil.searchAriangList(key);
+		if(lsSong != null){
+			danhSachBaiHat.clear();
+			danhSachBaiHat.addAll(lsSong);
+			songAdapter.notifyDataSetChanged();
+		}else{
+			Toast.makeText(getActivity(), "FIND NO RECORD" , Toast.LENGTH_SHORT).show();
 		}
-		rsEx.addAll(rsCt);
-		
-		songAdapter = new SongAdapter(this, rsEx);
-		lvDanhSach.setAdapter(songAdapter);
 	}
 
 	public int getTabId() {
@@ -406,7 +398,7 @@ public void loading(boolean show) {
 
 @Override
 public void loadedDB() {
-	//loadData();
+	loadData();
 	Toast.makeText(this.getActivity(), "LOADED DB", Toast.LENGTH_SHORT).show();
 	
 }

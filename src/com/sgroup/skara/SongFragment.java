@@ -38,6 +38,7 @@ import com.sgroup.skara.model.Section;
 import com.sgroup.skara.model.Song;
 import com.sgroup.skara.model.UserOption;
 import com.sgroup.skara.util.Constant;
+import com.sgroup.skara.util.DBUtil;
 import com.sgroup.skara.util.DBWorking;
 import com.sgroup.skara.util.DataLoading;
 import com.sgroup.skara.util.MultiSpinner;
@@ -353,41 +354,15 @@ public class SongFragment extends Fragment  implements LoadingDataListener,DBLis
 				bh.getLyric().indexOf(str)>=0
 				);
 	}
-	
-	public void Search1(String txt){
-		LinkedList<Song> rs= new LinkedList<Song>();
-		for (int i=0; i<danhSachBaiHat.size(); i++)
-			if (Correct(txt, danhSachBaiHat.get(i)))
-			{
-				rs.add(danhSachBaiHat.get(i));
-			}
-		
-		songAdapter = new SongAdapter(this, rs);
-		lvDanhSach.setAdapter(songAdapter);
-		
-	}
-	
 	public void Search(String key) {
-		LinkedList<Song> rsEx= new LinkedList<Song>();
-		LinkedList<Song> rsCt= new LinkedList<Song>();
-		int l=danhSachBaiHat.size();
-		for (int i=0; i<l; i++)
-		{
-			Song bh = danhSachBaiHat.get(i);
-			int rs = bh.Compare(key, new int[]{searchField});
-			if (rs==Song.RESULF_FIND_EXACT)
-			{
-				rsEx.add(bh);
-			}
-			if (rs==Song.RESULF_FIND_CONTANT)
-			{
-				rsCt.add(bh);
-			}
+		List<Song> lsSong  = DBUtil.searchAriangList(key);
+		if(lsSong != null){
+			danhSachBaiHat.clear();
+			danhSachBaiHat.addAll(lsSong);
+			songAdapter.notifyDataSetChanged();
+		}else{
+			Toast.makeText(getActivity(), "FIND NO RECORD" , Toast.LENGTH_SHORT).show();
 		}
-		rsEx.addAll(rsCt);
-		
-		songAdapter = new SongAdapter(this, rsEx);
-		lvDanhSach.setAdapter(songAdapter);
 	}
 
 	public int getTabId() {

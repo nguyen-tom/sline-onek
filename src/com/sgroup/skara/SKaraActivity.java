@@ -1,6 +1,5 @@
 package com.sgroup.skara;
 
-import java.io.UnsupportedEncodingException;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,7 +7,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
@@ -16,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.sgroup.skara.listener.LoadingDataListener;
-import com.sgroup.skara.model.LinkSongs;
 import com.sgroup.skara.model.Section;
 import com.sgroup.skara.util.DBUtil;
 import com.viewpagerindicator.TabPageIndicator;
@@ -32,7 +29,6 @@ public class SKaraActivity extends FragmentActivity implements LoadingDataListen
 	LinearLayout loading;
 	private SongFragment fragmentDanhSach;
 	private SongFragment fragmentYeuThich;
-    private LinkSongs linkSongs = new LinkSongs();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +87,6 @@ public class SKaraActivity extends FragmentActivity implements LoadingDataListen
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
 
